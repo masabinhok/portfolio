@@ -1,9 +1,11 @@
+
 import React from 'react'
+import Console from './Console'
 
 const Hero = () => {
   return (
     <section>
-      <div className='flex flex-col p-2 w-fit'>
+      <div className='flex flex-col p-2 w-fit mb-10'>
         {/* Header and subheader */}
         <h1 className='lowercase text-7xl font-bold text-soft'>
           Sabin Shrestha.
@@ -12,6 +14,7 @@ const Hero = () => {
       </div>
 
       {/* Let's build a console like simulation here. */}
+      <Console />
 
     </section>
   )

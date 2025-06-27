@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quickSand.variable} antialiased w-screen flex flex-col items-center`}
+        className={`${quickSand.variable} antialiased w-full min-h-screen flex flex-col items-center overflow-x-hidden`}
       >
         {children}
       </body>
