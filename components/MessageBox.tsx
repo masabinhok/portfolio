@@ -62,7 +62,7 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
           >
             <X
               size={18}
-              className="text-white group-hover:text-white transition-colors duration-200 group-hover:rotate-90 transform transition-transform duration-300"
+              className="text-white group-hover:text-white  group-hover:rotate-90 transform transition-transform duration-300"
             />
           </button>
 
