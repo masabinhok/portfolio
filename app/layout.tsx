@@ -12,7 +12,7 @@ const quickSand = Quicksand({
 
 export const metadata: Metadata = {
   title: "Sabin Shrestha",
-  description: "I just don't build APIs, I build foundations.",
+  description: "I just don&apos;t build APIs, I build foundations.",
 };
 
 export default function RootLayout({

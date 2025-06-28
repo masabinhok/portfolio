@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 export interface TerminalProps {
   hiring: boolean;
@@ -14,14 +14,12 @@ interface StepGroup {
 
 const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
-  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
-  const [currentStepInGroup, setCurrentStepInGroup] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const stepGroups: StepGroup[] = [
+  const stepGroups: StepGroup[] = useMemo(() => [
     {
       steps: [
         { text: '$ curl -X POST /api/candidate/hire-me-please', delay: 300, duration: 800 },
@@ -105,7 +103,7 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
       groupDelay: 0,
       persistent: true
     }
-  ];
+  ], []);
 
   const typeText = async (text: string, duration: number) => {
     setIsTyping(true);
@@ -135,8 +133,6 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
   useEffect(() => {
     if (!hiring) {
       setDisplayedLines([]);
-      setCurrentGroupIndex(0);
-      setCurrentStepInGroup(0);
       setCurrentText('');
       setIsTyping(false);
       setIsComplete(false);
@@ -148,7 +144,6 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
 
       for (let groupIndex = 0; groupIndex < stepGroups.length; groupIndex++) {
         const group = stepGroups[groupIndex];
-        setCurrentGroupIndex(groupIndex);
 
         // For persistent groups, build up the displayed lines
         const groupLines: string[] = [];
@@ -156,7 +151,6 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
         // Process each step in the group
         for (let stepIndex = 0; stepIndex < group.steps.length; stepIndex++) {
           const step = group.steps[stepIndex];
-          setCurrentStepInGroup(stepIndex);
 
           await new Promise(resolve => setTimeout(resolve, step.delay));
           await typeText(step.text, step.duration);
@@ -189,7 +183,7 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
     };
 
     runAnimation();
-  }, [hiring, setHired, setHiring]);
+  }, [hiring, setHired, setHiring, stepGroups]);
 
   const renderTerminalContent = () => {
     if (!hiring && !isComplete) {
@@ -198,7 +192,7 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
           <span className="">$masabinhok: </span>
           <span className="animate-pulse duration-75 ml-1">user says yayy!!!</span>
           <span>_</span>
-         
+
         </div>
       );
     }

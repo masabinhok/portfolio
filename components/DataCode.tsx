@@ -26,7 +26,7 @@ const DataCode = () => {
   return (
     <div className="space-y-0.5 text-sm leading-5">
       <div className="pt-2">
-        <span className="text-gray-500">// Ready to contribute! </span>
+        <span className="text-gray-500">{/* Ready to contribute! */}</span>
       </div>
       <div className="flex">
         <span className="text-purple-400">export const</span>
@@ -39,14 +39,14 @@ const DataCode = () => {
         <div>
           <span className="text-blue-300">fullName</span>
           <span className="text-gray-300">: </span>
-          <span className="text-emerald-300">'Sabin Shrestha'</span>
+          <span className="text-emerald-300">&apos;Sabin Shrestha&apos;</span>
           <span className="text-gray-300">,</span>
         </div>
 
         <div>
           <span className="text-blue-300">email</span>
           <span className="text-gray-300">: </span>
-          <span className="text-emerald-300">'sabin.shrestha.er@gmail.com'</span>
+          <span className="text-emerald-300">&apos;sabin.shrestha.er@gmail.com&apos;</span>
           <span className="text-gray-300">,</span>
         </div>
 
@@ -55,7 +55,7 @@ const DataCode = () => {
           <span className="text-gray-300">: [</span>
           {skills.map((skill, idx) => (
             <div className='' key={idx}>
-              <span className="text-emerald-300">'{skill}'</span>
+              <span className="text-emerald-300">&apos;{skill}&apos;</span>
               <span className="text-gray-300">{idx === skills.length - 1 ? '' : ','}</span>
             </div>
           ))}
@@ -75,7 +75,7 @@ const DataCode = () => {
           {
             projects.map((project, idx) => (
               <Link target='_blank' key={idx} href={project.url}>
-                <span className="text-emerald-300">'{project.name}'</span>
+                <span className="text-emerald-300">&apos;{project.name}&apos;</span>
                 <span className="text-gray-300">{idx === projects.length - 1 ? '' : ','}</span>
               </Link>
             ))
@@ -88,11 +88,11 @@ const DataCode = () => {
             <span className="text-blue-300">{social.social}</span>
             <span className="text-gray-300">: </span>
             <Link target='_blank' href={social.url}>
-              <span className="text-emerald-300">'{social.username}'</span>
+              <span className="text-emerald-300">&apos;{social.username}&apos;</span>
             </Link>
             <span className="text-gray-300">,</span>
           </div>
-        ))} 
+        ))}
       </div >
 
       <div className="text-gray-300">{'};'}</div>

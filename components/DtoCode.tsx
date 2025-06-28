@@ -4,7 +4,7 @@ const DtoCode = () => {
   return (
     <div className="space-y-0.5 text-sm leading-5 font-mono">
       <div>
-        <span className="text-gray-500">// Data Transfer Object for hire requests</span>
+        <span className="text-gray-500">{/* Data Transfer Object for hire requests */}</span>
       </div>
 
       <div>
@@ -32,19 +32,19 @@ const DtoCode = () => {
       <div className="h-1"></div>
 
       <div className="pl-2">
-        <span className="text-pink-400">@Default( 
+        <span className="text-pink-400">@Default(
           <span className='text-emerald-300'>
-          'backend-dev'
+            &apos;backend-dev&apos;
           </span>
-         )</span>
+          )</span>
       </div>
       <div className="pl-2">
         <span className="text-pink-400">@IsIn([</span>
-        <span className="text-emerald-300">'frontend-dev'</span>
+        <span className="text-emerald-300">&apos;frontend-dev&apos;</span>
         <span className="text-gray-300">, </span>
-        <span className="text-emerald-300">'backend-dev'</span>
+        <span className="text-emerald-300">&apos;backend-dev&apos;</span>
         <span className="text-gray-300">, </span>
-        <span className="text-emerald-300">'fullstack-dev'</span>
+        <span className="text-emerald-300">&apos;fullstack-dev&apos;</span>
         <span className="text-pink-400">])</span>
       </div>
       <div className="pl-2">
@@ -60,13 +60,13 @@ const DtoCode = () => {
       </div>
 
       <div className="pl-2">
-        
+
         <span className="text-pink-400">@MinLength(</span>
         <span className="text-orange-400">10</span>
         <span className="text-gray-300">, {'{'} </span>
         <span className="text-blue-300">message</span>
         <span className="text-gray-300">: </span>
-        <span className="text-emerald-300">'Make it worth reading!'</span>
+        <span className="text-emerald-300">&apos;Make it worth reading!&apos;</span>
         <span className="text-gray-300"> {'}'})</span>
       </div>
       <div className="pl-2">

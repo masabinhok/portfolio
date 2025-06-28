@@ -4,12 +4,12 @@ const ControllerCode = () => {
   return (
     <div className="space-y-0.5 text-sm leading-5 font-mono">
       <div>
-        <span className="text-gray-500">// NestJS Controller for hire requests</span>
+        <span className="text-gray-500">{/* NestJS Controller for hire requests */}</span>
       </div>
 
       <div>
         <span className="text-pink-400">@Controller(</span>
-        <span className="text-emerald-300">'candidate'</span>
+        <span className="text-emerald-300">&apos;candidate&apos;</span>
         <span className="text-pink-400">)</span>
       </div>
       <div>
@@ -56,7 +56,7 @@ const ControllerCode = () => {
       </div>
       <div className="pl-2">
         <span className="text-pink-400">@Post(</span>
-        <span className="text-emerald-300">'hire-me-please'</span>
+        <span className="text-emerald-300">&apos;hire-me-please&apos;</span>
         <span className="text-pink-400">)</span>
       </div>
       <div className="pl-2">
@@ -97,7 +97,7 @@ const ControllerCode = () => {
         <span className="text-purple-400">throw new</span>
         <span className="text-yellow-300"> BadRequestException</span>
         <span className="text-gray-300">(</span>
-        <span className="text-emerald-300">'Currently not available'</span>
+        <span className="text-emerald-300">&apos;Currently not available&apos;</span>
         <span className="text-gray-300">);</span>
       </div>
 
@@ -125,7 +125,7 @@ const ControllerCode = () => {
         <span className="text-gray-300"> {'{'} </span>
         <span className="text-blue-300">message</span>
         <span className="text-gray-300">: </span>
-        <span className="text-emerald-300">'Thanks! I&apos;ll be in touch soon.'</span>
+        <span className="text-emerald-300">&apos;Thanks! I&apos;ll be in touch soon.&apos;</span>
         <span className="text-gray-300"> {'}'};</span>
       </div>
 

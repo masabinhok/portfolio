@@ -6,7 +6,7 @@ import { CheckCircle, Loader2, Rocket, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from './Button';
 import MessageBox from './MessageBox';
 import { useWindowSize } from 'react-use'
-import Confetti from 'react-confetti' 
+import Confetti from 'react-confetti'
 
 
 const Hero = () => {
@@ -36,7 +36,7 @@ const Hero = () => {
       return () => document.removeEventListener('click', handleClick);
     }
   }, [showConfetti]);
-  
+
 
   const renderHireStatus = () => {
     if (hiring) {
@@ -70,7 +70,7 @@ const Hero = () => {
   return (
     <section>
       {/* Add confetti when hired */}
-      {showConfetti &&  <Confetti width={width} height={height} />}
+      {showConfetti && <Confetti width={width} height={height} />}
 
       <div className='flex gap-10 items-center min-h-screen'>
         <div className='flex flex-col p-2 mb-10 w-full'>
@@ -91,14 +91,14 @@ const Hero = () => {
             </ExceptionalButton>
           </div>
         </div>
-        
 
-        {/* Let's build a console like simulation here. */}
+
+        {/* Let&apos;s build a console like simulation here. */}
         <div className='w-full flex flex-col items-end'>
           {
             hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <Code />
           }
-         
+
         </div>
       </div>
 

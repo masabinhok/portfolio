@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ButtonHTMLAttributes } from 'react';
-import { Zap, CheckCircle, Sparkles, Rocket, Star } from 'lucide-react';
+
 
 interface Particle {
   id: number;

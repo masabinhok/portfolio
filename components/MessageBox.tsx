@@ -72,7 +72,7 @@ const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) =>
             </div>
             <div>
               <h2 className="text-2xl font-bold">Send Hiring Offer </h2>
-              <p className="text-blue-100">Let's discuss an amazing opportunity!</p>
+              <p className="text-blue-100">Let&apos;s discuss an amazing opportunity!</p>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) =>
                 onChange={(e) => handleInputChange('offerMessage', e.target.value)}
                 onFocus={() => setFocusedField('message')}
                 onBlur={() => setFocusedField('message')}
-                placeholder="Hi! I'm impressed by your skills and would love to discuss an exciting opportunity at our company. We're looking for talented developers like you..."
+                placeholder="Hi! I&apos;m impressed by your skills and would love to discuss an exciting opportunity at our company. We&apos;re looking for talented developers like you..."
                 rows={6}
                 maxLength={500}
                 className={`w-full px-4 py-4 border-2 rounded-xl transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none resize-none ${focusedField === 'message'
@@ -166,12 +166,12 @@ const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) =>
             size="md"
           >
             {isSubmitting ? (
-  
-                <>
-                  <span className="animate-pulse">Sending your offer...</span>
-                  <div className="animate-spin">
-                    <Loader2 size={16} />
-                  </div>
+
+              <>
+                <span className="animate-pulse">Sending your offer...</span>
+                <div className="animate-spin">
+                  <Loader2 size={16} />
+                </div>
               </>
             ) : (
               <>
