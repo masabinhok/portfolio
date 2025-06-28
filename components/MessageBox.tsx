@@ -99,7 +99,7 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
                 onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField(null)}
                 placeholder="recruiter@company.com"
-                className={`w-full px-4 py-4 pl-12 border-2 rounded-xl transition-all duration-300 bg-gray-50 focus:bg-white focus:outline-none ${focusedField === 'email'
+                className={`w-full px-4 py-4 pl-12 border-2 rounded-xl transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none ${focusedField === 'email'
                   ? 'border-blue-500 shadow-lg shadow-blue-500/20'
                   : formData.recruiterEmail && formData.recruiterEmail.includes('@')
                     ? 'border-green-400'
@@ -141,8 +141,8 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
                 placeholder="Hi! I'm impressed by your skills and would love to discuss an exciting opportunity at our company. We're looking for talented developers like you..."
                 rows={6}
                 maxLength={500}
-                className={`w-full px-4 py-4 border-2 rounded-xl transition-all duration-300 bg-gray-50 focus:bg-white focus:outline-none resize-none ${focusedField === 'message'
-                  ? 'border-purple-500 shadow-lg shadow-purple-500/20'
+                className={`w-full px-4 py-4 border-2 rounded-xl transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none resize-none ${focusedField === 'message'
+                  ? 'border-purple-500 shadow-lg shadow-purple-500/20'  
                   : formData.offerMessage.length > 10
                     ? 'border-green-400'
                     : 'border-gray-200 hover:border-gray-300'
