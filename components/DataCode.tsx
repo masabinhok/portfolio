@@ -1,59 +1,104 @@
+import Link from 'next/link';
 import React from 'react';
 
 const DataCode = () => {
+  const projects = [
+    {
+      name: 'e4.learnChess',
+      url: 'https://e4-learnchess.vercel.app'
+    }
+  ]
+
+  const socials = [
+    {
+      social: 'GitHub',
+      username: 'masabinhok',
+      url: 'https://github.com/masabinhok'
+    },
+    {
+      social: 'LinkedIn',
+      username: 'sabinshresthaa',
+      url: 'https://www.linkedin.com/in/sabinshresthaa/'
+    }
+  ]
+
+  const skills = ['TypeScript', 'NestJs', 'NodeJs', 'PostgreSQL', 'MongoDB', 'ReactJs', 'NextJs']
   return (
-    <div className="space-y-1 text-sm">
-      <div className="flex space-x-1">
-        <div className="text-blue-300">export const</div>
-        <div className="text-yellow-300">candidateProfile</div>
-        <div className="text-white">: Candidate = {'{'}</div>
+    <div className="space-y-0.5 text-sm leading-5">
+      <div className="pt-2">
+        <span className="text-gray-500">// Ready to contribute! </span>
+      </div>
+      <div className="flex">
+        <span className="text-purple-400">export const</span>
+        <span className="text-yellow-300 ml-2">candidateProfile</span>
+        <span className="text-cyan-400 ml-2">: Candidate</span>
+        <span className="text-gray-300 ml-2">= {'{'}</span>
       </div>
 
-      <div className="pl-6 space-y-2">
-        <div className="text-blue-300">
-          fullName: <span className="text-orange-300">'Sabin Shrestha'</span>,
+      <div className="pl-4 space-y-1">
+        <div>
+          <span className="text-blue-300">fullName</span>
+          <span className="text-gray-300">: </span>
+          <span className="text-emerald-300">'Sabin Shrestha'</span>
+          <span className="text-gray-300">,</span>
         </div>
 
-        <div className="text-blue-300">
-          email: <span className="text-orange-300">'sabin.shrestha@example.com'</span>,
+        <div>
+          <span className="text-blue-300">email</span>
+          <span className="text-gray-300">: </span>
+          <span className="text-emerald-300">'sabin.shrestha.er@gmail.com'</span>
+          <span className="text-gray-300">,</span>
         </div>
 
-        <div className="text-blue-300">
-          skills: [
-          <span className="text-orange-300">'TypeScript'</span>,{' '}
-          <span className="text-orange-300">'NestJS'</span>,{' '}
-          <span className="text-orange-300">'PostgreSQL'</span>,{' '}
-          <span className="text-orange-300">'Prisma'</span>,{' '}
-          <span className="text-orange-300">'Docker'</span>
-          ],
+        <div>
+          <span className="text-blue-300">skills</span>
+          <span className="text-gray-300">: [</span>
+          {skills.map((skill, idx) => (
+            <div className='' key={idx}>
+              <span className="text-emerald-300">'{skill}'</span>
+              <span className="text-gray-300">{idx === skills.length - 1 ? '' : ','}</span>
+            </div>
+          ))}
+          <span className="text-gray-300">],</span>
         </div>
 
-        <div className="text-blue-300">
-          isAvailable: <span className="text-green-300">true</span>,
+        <div>
+          <span className="text-blue-300">isAvailable</span>
+          <span className="text-gray-300">: </span>
+          <span className="text-orange-400">true</span>
+          <span className="text-gray-300">,</span>
         </div>
 
-        <div className="text-blue-300">
-          projects: [
-          <span className="text-orange-300">'SkillSwap'</span>,{' '}
-          <span className="text-orange-300">'Chess Trainer'</span>
-          ],
+        <div>
+          <span className="text-blue-300">projects</span>
+          <span className="text-gray-300">: [</span>
+          {
+            projects.map((project, idx) => (
+              <Link target='_blank' key={idx} href={project.url}>
+                <span className="text-emerald-300">'{project.name}'</span>
+                <span className="text-gray-300">{idx === projects.length - 1 ? '' : ','}</span>
+              </Link>
+            ))
+          }
+          <span className="text-gray-300">],</span>
         </div>
 
-        <div className="text-blue-300">
-          linkedin: <span className="text-orange-300">'https://linkedin.com/in/sabinshrestha'</span>,
-        </div>
+        {socials.map((social, idx) => (
+          <div key={idx}>
+            <span className="text-blue-300">{social.social}</span>
+            <span className="text-gray-300">: </span>
+            <Link target='_blank' href={social.url}>
+              <span className="text-emerald-300">'{social.username}'</span>
+            </Link>
+            <span className="text-gray-300">,</span>
+          </div>
+        ))} 
+      </div >
 
-        <div className="text-blue-300">
-          github: <span className="text-orange-300">'https://github.com/sabin'</span>,
-        </div>
+      <div className="text-gray-300">{'};'}</div>
 
-        <div className="text-blue-300">
-          x: <span className="text-orange-300">'https://twitter.com/sabin'</span>,
-        </div>
-      </div>
 
-      <div className="text-white">{'};'}</div>
-    </div>
+    </div >
   );
 };
 
