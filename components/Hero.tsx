@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Code from './Code'
 import Terminal from './Terminal';
 import { CheckCircle, Loader2, Rocket, Sparkles, Zap } from 'lucide-react';
@@ -15,6 +15,27 @@ const Hero = () => {
   const [hiring, setHiring] = useState<boolean>(false);
   const { width, height } = useWindowSize() // Add this for confetti
 
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (hired) {
+      setShowConfetti(true);
+    }
+  }, [hired]);
+
+
+  useEffect(() => {
+    const handleClick = () => {
+      if (showConfetti) {
+        setShowConfetti(false);
+      }
+    };
+
+    if (showConfetti) {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
+  }, [showConfetti]);
   
 
   const renderHireStatus = () => {
@@ -49,7 +70,7 @@ const Hero = () => {
   return (
     <section>
       {/* Add confetti when hired */}
-      {hired &&  <Confetti width={width} height={height} />}
+      {showConfetti &&  <Confetti width={width} height={height} />}
 
       <div className='flex gap-10 items-center min-h-screen'>
         <div className='flex flex-col p-2 mb-10 w-full'>
