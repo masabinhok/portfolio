@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageSquare, Send, User, Briefcase, Check, X } from 'lucide-react';
+import { Mail, MessageSquare, Send, User, Briefcase, Check, X, Loader2 } from 'lucide-react';
 import ExceptionalButton from './Button';
 
 interface FormData {
@@ -11,11 +11,11 @@ type FocusedField = 'email' | 'message' | null;
 
 export interface MessageBoxProps {
   hired: boolean;
-  setHired: (hired: boolean) => void;
+  setHiring: (hiring: boolean) => void;
   setShowMessageBox: (showMessageBox: boolean) => void;
 }
 
-const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => {
+const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) => {
   const [formData, setFormData] = useState<FormData>({
     recruiterEmail: '',
     offerMessage: ''
@@ -38,7 +38,7 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     setIsSubmitting(false);
-    setHired(true);
+    setHiring(true);
     setShowMessageBox(false)
 
     // Reset after 3 seconds
@@ -166,9 +166,12 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
             size="md"
           >
             {isSubmitting ? (
-              <>
-                <Send size={20} />
-                <span>Sending Your Offer...</span>
+  
+                <>
+                  <span className="animate-pulse">Sending your offer...</span>
+                  <div className="animate-spin">
+                    <Loader2 size={16} />
+                  </div>
               </>
             ) : (
               <>

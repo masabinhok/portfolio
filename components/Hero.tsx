@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import Code from './Code'
 import Terminal from './Terminal';
-import { CheckCircle, Rocket, Sparkles, Zap } from 'lucide-react';
+import { CheckCircle, Loader2, Rocket, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from './Button';
 import MessageBox from './MessageBox';
 
@@ -10,6 +10,38 @@ import MessageBox from './MessageBox';
 const Hero = () => {
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
   const [hired, setHired] = useState<boolean>(false);
+  const [hiring, setHiring] = useState<boolean>(false);
+
+  const renderHireStatus = () => {
+    if (hiring) {
+      return (
+        <>
+          <span className="animate-pulse">Processing Hire...</span>
+          <div className="animate-spin">
+            <Loader2 size={16} />
+          </div>
+        </>
+      )
+    }
+    if (hired) {
+      return (
+        <>
+          <CheckCircle size={24} />
+          <span>Hired!</span>
+          <Sparkles size={20} />
+        </>)
+    } else {
+      return (
+        <>
+          <Rocket size={24} />
+          <span>Hire Me</span>
+          <Zap size={20} />
+        </>
+      )
+    }
+  }
+
+
   return (
     <section>
       <div className='flex gap-10'>
@@ -24,28 +56,16 @@ const Hero = () => {
         {/* Let's build a console like simulation here. */}
         <div className='w-full flex flex-col items-end'>
           {
-            hired ? <Terminal /> : <Code />
+            hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <Code />
           }
           <div className='mt-5 w-full'>
             <ExceptionalButton
-              disabled={showMessageBox || hired}
+              disabled={showMessageBox || hired || hiring}
               onClick={() => setShowMessageBox(!showMessageBox)}
               variant={hired ? "success" : "primary"}
               size="lg"
             >
-              {hired ? (
-                <>
-                  <CheckCircle size={24} />
-                  <span>Hired!</span>
-                  <Sparkles size={20} />
-                </>
-              ) : (
-                <>
-                  <Rocket size={24} />
-                  <span>Hire Me</span>
-                  <Zap size={20} />
-                </>
-              )}
+              {renderHireStatus()}
             </ExceptionalButton>
           </div>
 
@@ -54,7 +74,7 @@ const Hero = () => {
       </div>
 
       {
-        showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} hired={hired} setHired={setHired} /> : null
+        showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} hired={hired} setHiring={setHiring} /> : null
       }
 
     </section>
