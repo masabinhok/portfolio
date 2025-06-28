@@ -195,9 +195,10 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
     if (!hiring && !isComplete) {
       return (
         <div className="text-gray-500 flex items-center">
-          <span className="">$sabin_is_hired: </span>
-          <span className="animate-pulse duration-75 ml-1">yayyy</span>
-          <span className="">_</span>
+          <span className="">$masabinhok: </span>
+          <span className="animate-pulse duration-75 ml-1">user says yayy!!!</span>
+          <span>_</span>
+         
         </div>
       );
     }

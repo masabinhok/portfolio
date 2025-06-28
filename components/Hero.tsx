@@ -5,12 +5,15 @@ import Terminal from './Terminal';
 import { CheckCircle, Loader2, Rocket, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from './Button';
 import MessageBox from './MessageBox';
+import { useWindowSize } from 'react-use'
+import Confetti from 'react-confetti' 
 
 
 const Hero = () => {
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
   const [hired, setHired] = useState<boolean>(false);
   const [hiring, setHiring] = useState<boolean>(false);
+  const { width, height } = useWindowSize() // Add this for confetti
 
   const renderHireStatus = () => {
     if (hiring) {
@@ -41,9 +44,11 @@ const Hero = () => {
     }
   }
 
-
   return (
     <section>
+      {/* Add confetti when hired */}
+      {hired && <Confetti width={width} height={height} />}
+
       <div className='flex gap-10'>
         <div className='flex flex-col p-2 mb-10 w-full'>
           {/* Header and subheader */}
@@ -68,15 +73,12 @@ const Hero = () => {
               {renderHireStatus()}
             </ExceptionalButton>
           </div>
-
         </div>
-
       </div>
 
       {
         showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} hired={hired} setHiring={setHiring} /> : null
       }
-
     </section>
   )
 }
