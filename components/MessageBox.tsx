@@ -57,7 +57,7 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
           {/* Enhanced Close Button */}
           <button
             onClick={() => setShowMessageBox(false)}
-            className="absolute top-4 right-4 group p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+            className="absolute top-4 right-4 group p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer"
             aria-label="Close dialog"
           >
             <X
