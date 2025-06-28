@@ -4,9 +4,11 @@ import Code from './Code'
 import Terminal from './Terminal';
 import { CheckCircle, Rocket, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from './Button';
+import MessageBox from './MessageBox';
 
 
 const Hero = () => {
+  const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
   const [hired, setHired] = useState<boolean>(false);
   return (
     <section>
@@ -26,7 +28,8 @@ const Hero = () => {
           }
           <div className='mt-5 w-full'>
             <ExceptionalButton
-              onClick={() => setHired(!hired)}
+              disabled={showMessageBox}
+              onClick={() => setShowMessageBox(!showMessageBox)}
               variant={hired ? "success" : "primary"}
               size="lg"
             >
@@ -49,6 +52,10 @@ const Hero = () => {
         </div>
 
       </div>
+
+      {
+        showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} hired={hired} setHired={setHired} /> : null
+      }
 
     </section>
   )
