@@ -28,7 +28,7 @@ const Hero = () => {
           }
           <div className='mt-5 w-full'>
             <ExceptionalButton
-              disabled={showMessageBox}
+              disabled={showMessageBox || hired}
               onClick={() => setShowMessageBox(!showMessageBox)}
               variant={hired ? "success" : "primary"}
               size="lg"

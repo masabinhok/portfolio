@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, MessageSquare, Send, User, Briefcase, Check, } from 'lucide-react';
+import { Mail, MessageSquare, Send, User, Briefcase, Check, X } from 'lucide-react';
 import ExceptionalButton from './Button';
 
 interface FormData {
@@ -21,7 +21,6 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
     offerMessage: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [focusedField, setFocusedField] = useState<FocusedField>(null);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -39,44 +38,40 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     setIsSubmitting(false);
-    setIsSubmitted(true);
     setHired(true);
     setShowMessageBox(false)
 
     // Reset after 3 seconds
     setTimeout(() => {
-      setIsSubmitted(false);
       setFormData({ recruiterEmail: '', offerMessage: '' });
     }, 3000);
   };
 
   const isFormValid = formData.recruiterEmail.includes('@') && formData.offerMessage.trim().length > 10;
 
-  if (isSubmitted) {
-    return (
-      <div className="max-w-2xl mx-auto p-8">
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8 text-center animate-fade-in">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-            <Check size={32} className="text-white" />
-          </div>
-          <h3 className="text-2xl font-bold text-green-800 mb-2">Message Sent Successfully! 🎉</h3>
-          <p className="text-green-600">Your hiring offer has been delivered. I'll get back to you soon!</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-2xl mx-auto p-8 fixed top-0">
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white">
+        <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white">
+          {/* Enhanced Close Button */}
+          <button
+            onClick={() => setShowMessageBox(false)}
+            className="absolute top-4 right-4 group p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+            aria-label="Close dialog"
+          >
+            <X
+              size={18}
+              className="text-white group-hover:text-white transition-colors duration-200 group-hover:rotate-90 transform transition-transform duration-300"
+            />
+          </button>
+
           <div className="flex items-center gap-3 mb-2">
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
               <Briefcase size={24} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Send Hiring Offer</h2>
+              <h2 className="text-2xl font-bold">Send Hiring Offer </h2>
               <p className="text-blue-100">Let's discuss an amazing opportunity!</p>
             </div>
           </div>
@@ -137,12 +132,12 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
                 value={formData.offerMessage}
                 onChange={(e) => handleInputChange('offerMessage', e.target.value)}
                 onFocus={() => setFocusedField('message')}
-                onBlur={() => setFocusedField(null)}
+                onBlur={() => setFocusedField('message')}
                 placeholder="Hi! I'm impressed by your skills and would love to discuss an exciting opportunity at our company. We're looking for talented developers like you..."
                 rows={6}
                 maxLength={500}
                 className={`w-full px-4 py-4 border-2 rounded-xl transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none resize-none ${focusedField === 'message'
-                  ? 'border-purple-500 shadow-lg shadow-purple-500/20'  
+                  ? 'border-purple-500 shadow-lg shadow-purple-500/20'
                   : formData.offerMessage.length > 10
                     ? 'border-green-400'
                     : 'border-gray-200 hover:border-gray-300'
@@ -163,7 +158,6 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
             </div>
           </div>
 
-
           {/* Submit Button */}
           <ExceptionalButton
             type='submit'
@@ -176,10 +170,8 @@ const MessageBox = ({ hired, setHired, setShowMessageBox }: MessageBoxProps) => 
                 <Send size={20} />
                 <span>Sending Your Offer...</span>
               </>
-
             ) : (
               <>
-
                 <Send size={20} />
                 <span>Send Hiring Offer</span>
               </>
