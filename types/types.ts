@@ -1,0 +1,1 @@
+export type CodeTab = 'hire-me.dto.ts' | 'me.controller.ts' | 'data.ts'

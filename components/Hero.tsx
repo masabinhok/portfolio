@@ -1,6 +1,6 @@
 
 import React from 'react'
-import Console from './Console'
+import Code from './Code'
 
 const Hero = () => {
   return (
@@ -14,7 +14,7 @@ const Hero = () => {
       </div>
 
       {/* Let's build a console like simulation here. */}
-      <Console />
+      <Code />
 
     </section>
   )

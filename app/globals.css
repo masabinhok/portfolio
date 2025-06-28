@@ -46,3 +46,9 @@ body {
   font-family: var(--font-sans);
   transition: background-color 0.3s, color 0.3s;
 }
+
+@layer utilities {
+  .code-tab {
+    @apply flex items-center border-r border-gray-800 hover:bg-gray-800 p-3 rounded-sm cursor-pointer 
+  }
+}
