@@ -60,8 +60,8 @@ const Code = () => {
       role="tabpanel"
       aria-label="Code viewer"
     >
-      <div className='flex border-b border-gray-700 bg-gray-800'>
-        <div className='flex overflow-x-auto scrollbar-hide' role="tablist">
+      <div className='flex border-b border-gray-700 bg-gray-800 items-center '>
+        <div className='flex overflow-x-auto scrollbar-hide ' role="tablist">
           {tabs.map((t) => {
             const Icon = t.icon
             const isActive = t.id === tab
@@ -76,14 +76,14 @@ const Code = () => {
                   border-r border-gray-700 min-w-max group relative
                   ${isActive
                     ? 'bg-gray-900 text-green-400 border-b-2 border-green-400'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-750'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-750 '
                   }
                   focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-inset
                 `}
                 role="tab"
                 aria-selected={isActive}
                 aria-controls={`panel-${t.id}`}
-                tabIndex={isActive ? 0 : -1}
+                tabIndex={0}
                 title={t.description}
               >
                 <Icon
