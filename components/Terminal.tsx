@@ -223,7 +223,7 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
         {/* Show processing indicator when between steps */}
         {hiring && !currentText && !isTyping && !isComplete && (
           <div className="text-gray-600 flex items-center">
-            <span className="animate-pulse">$ processing</span>
+            <span className="animate-pulse">$masabinhok: processing</span>
             <span className="animate-pulse ml-1">_</span>
           </div>
         )}

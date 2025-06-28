@@ -50,7 +50,7 @@ const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) =>
   const isFormValid = formData.recruiterEmail.includes('@') && formData.offerMessage.trim().length > 10;
 
   return (
-    <div className="max-w-2xl mx-auto p-8 fixed top-0">
+    <div className="max-w-2xl mx-auto p-8 fixed top-0 right-25 w-full">
       <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
         {/* Header */}
         <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 p-6 text-white">

@@ -15,6 +15,8 @@ const Hero = () => {
   const [hiring, setHiring] = useState<boolean>(false);
   const { width, height } = useWindowSize() // Add this for confetti
 
+  
+
   const renderHireStatus = () => {
     if (hiring) {
       return (
@@ -47,22 +49,16 @@ const Hero = () => {
   return (
     <section>
       {/* Add confetti when hired */}
-      {hired && <Confetti width={width} height={height} />}
+      {hired &&  <Confetti width={width} height={height} />}
 
-      <div className='flex gap-10'>
+      <div className='flex gap-10 items-center min-h-screen'>
         <div className='flex flex-col p-2 mb-10 w-full'>
           {/* Header and subheader */}
           <h1 className='lowercase text-7xl font-bold text-soft'>
             Sabin Shrestha.
           </h1>
           <h3 className='text-right text-muted'>I don&apos;t just <span className='italic text-heading'>build APIs</span>, I  <span className='italic text-heading'>build foundations.</span></h3>
-        </div>
 
-        {/* Let's build a console like simulation here. */}
-        <div className='w-full flex flex-col items-end'>
-          {
-            hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <Code />
-          }
           <div className='mt-5 w-full'>
             <ExceptionalButton
               disabled={showMessageBox || hired || hiring}
@@ -73,6 +69,15 @@ const Hero = () => {
               {renderHireStatus()}
             </ExceptionalButton>
           </div>
+        </div>
+        
+
+        {/* Let's build a console like simulation here. */}
+        <div className='w-full flex flex-col items-end'>
+          {
+            hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <Code />
+          }
+         
         </div>
       </div>
 
