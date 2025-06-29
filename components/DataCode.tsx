@@ -1,28 +1,9 @@
+import { projects, skills, socials } from '@/constants/constants';
 import Link from 'next/link';
 import React from 'react';
 
 const DataCode = () => {
-  const projects = [
-    {
-      name: 'e4.learnChess',
-      url: 'https://e4-learnchess.vercel.app'
-    }
-  ]
 
-  const socials = [
-    {
-      social: 'GitHub',
-      username: 'masabinhok',
-      url: 'https://github.com/masabinhok'
-    },
-    {
-      social: 'LinkedIn',
-      username: 'sabinshresthaa',
-      url: 'https://www.linkedin.com/in/sabinshresthaa/'
-    }
-  ]
-
-  const skills = ['TypeScript', 'NestJs', 'NodeJs', 'PostgreSQL', 'MongoDB', 'ReactJs', 'NextJs']
   return (
     <div className="space-y-0.5 text-sm leading-5">
       <div className="pt-2">
