@@ -1,1 +1,1 @@
-export type CodeTab = 'hire-me.dto.ts' | 'candidate.controller.ts' | 'data.ts'
+export type CodeTab = 'candidate.controller.ts' | 'data.ts'

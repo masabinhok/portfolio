@@ -4,7 +4,7 @@ import { FileCode, Database, Code2 } from 'lucide-react'
 import React, { useState, useMemo } from 'react'
 import ControllerCode from './ControllerCode'
 import DataCode from './DataCode'
-import DtoCode from './DtoCode'
+
 
 const Code = () => {
   const [tab, setTab] = useState<CodeTab>('candidate.controller.ts')
@@ -22,12 +22,7 @@ const Code = () => {
       icon: Database,
       description: 'Data Layer'
     },
-    {
-      id: 'hire-me.dto.ts' as CodeTab,
-      label: 'hire-me.dto.ts',
-      icon: FileCode,
-      description: 'Data Transfer Object'
-    }
+
   ], [])
 
   const renderCode = () => {
@@ -36,8 +31,6 @@ const Code = () => {
         return <ControllerCode />
       case 'data.ts':
         return <DataCode />
-      case 'hire-me.dto.ts':
-        return <DtoCode />
       default:
         return <ControllerCode />
     }
@@ -60,8 +53,8 @@ const Code = () => {
       role="tabpanel"
       aria-label="Code viewer"
     >
-      <div className='flex border-b border-gray-700 bg-gray-800 items-center '>
-        <div className='flex overflow-x-auto scrollbar-hide ' role="tablist">
+      <div className='flex border-b border-gray-700 bg-gray-800 items-center'>
+        <div className='flex w-full' role="tablist">
           {tabs.map((t) => {
             const Icon = t.icon
             const isActive = t.id === tab
@@ -72,8 +65,8 @@ const Code = () => {
                 onClick={() => handleTabChange(t.id)}
                 onKeyDown={(e) => handleKeyDown(e, t.id)}
                 className={`
-                  flex items-center px-4 py-3 text-sm font-medium transition-all duration-200
-                  border-r border-gray-700 min-w-max group relative
+                    flex items-center justify-center px-4 py-3 text-sm font-medium transition-all duration-200
+                  border-r border-gray-700 flex-1 group relative 
                   ${isActive
                     ? 'bg-gray-900 text-green-400 border-b-2 border-green-400'
                     : 'text-gray-400 hover:text-gray-200 hover:bg-gray-750 '
@@ -90,7 +83,7 @@ const Code = () => {
                   size={16}
                   className={`transition-colors ${isActive ? 'text-green-400' : 'text-gray-500 group-hover:text-gray-300'}`}
                 />
-                <span className="ml-2 select-none">
+                <span className="ml-2 select-none ">
                   {t.label}
                 </span>
                 {isActive && (
