@@ -17,88 +17,68 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
   const [currentText, setCurrentText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [showReadingPhase, setShowReadingPhase] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const stepGroups: StepGroup[] = useMemo(() => [
     {
       steps: [
-        { text: '$ curl -X POST /api/candidate/hire-me-please', delay: 300, duration: 800 },
-        { text: '⟩ @Controller("candidate") initializing...', delay: 400, duration: 600 },
-        { text: '✓ Connection established', delay: 300, duration: 500 }
+        { text: '$ curl -X POST /api/candidate/hire-me-please', delay: 50, duration: 150 },
+        { text: '⟩ @Controller("candidate") initializing...', delay: 100, duration: 200 },
+        { text: '✓ Connection established', delay: 50, duration: 100 }
       ],
-      groupDelay: 800,
-      persistent: false
+      groupDelay: 100,
+      persistent: true
     },
     {
       steps: [
-        { text: '⟩ @Roles(Role.HR, Role.MANAGER) checking...', delay: 400, duration: 700 },
-        { text: '✓ Authorization granted', delay: 300, duration: 500 },
-        { text: '⟩ Parsing @Body() hireMeDto...', delay: 300, duration: 600 }
+        { text: '⟩ @Roles(Role.HR, Role.MANAGER) checking...', delay: 80, duration: 150 },
+        { text: '✓ Authorization granted', delay: 60, duration: 100 },
       ],
-      groupDelay: 900,
-      persistent: false
+      groupDelay: 150,
+      persistent: true
     },
     {
       steps: [
-        { text: '⟩ candidateService.getProfile() executing...', delay: 500, duration: 900 },
-        { text: '  fullName: "Sabin Shrestha"', delay: 200, duration: 400 },
-        { text: '  email: "sabin.shrestha.er@gmail.com"', delay: 200, duration: 400 },
-        { text: '  GitHub: "masabinhok"', delay: 200, duration: 400 },
-        { text: '  LinkedIn: "sabinshresthaa"', delay: 200, duration: 400 },
-        { text: '✓ Profile loaded successfully', delay: 300, duration: 500 }
+        { text: '⟩ candidateService.getProfile() executing...', delay: 100, duration: 200 },
+        { text: '✓ Profile loaded successfully', delay: 50, duration: 100 }
       ],
-      groupDelay: 1000,
-      persistent: false
+      groupDelay: 120,
+      persistent: true
     },
     {
       steps: [
-        { text: '⟩ Validating candidate.skills[]...', delay: 400, duration: 700 },
-        { text: '  ✓ TypeScript', delay: 150, duration: 300 },
-        { text: '  ✓ NestJs', delay: 150, duration: 300 },
-        { text: '  ✓ NodeJs', delay: 150, duration: 300 },
-        { text: '  ✓ PostgreSQL', delay: 150, duration: 300 },
-        { text: '  ✓ MongoDB', delay: 150, duration: 300 },
-        { text: '  ✓ ReactJs', delay: 150, duration: 300 },
-        { text: '  ✓ NextJs', delay: 150, duration: 300 }
+        { text: '⟩ Validating candidate.skills[]...', delay: 80, duration: 150 },
+        { text: '  ✓ React/TypeScript', delay: 40, duration: 80 },
+        { text: '  ✓ NestJS/Node.js', delay: 40, duration: 80 },
+        { text: '  ✓ PostgreSQL/MongoDB', delay: 40, duration: 80 },
+        { text: '  ✓ Docker/AWS', delay: 40, duration: 80 },
       ],
-      groupDelay: 1200,
-      persistent: false
+      groupDelay: 200,
+      persistent: true
     },
     {
       steps: [
-        { text: '⟩ Running DTO validations...', delay: 400, duration: 600 },
-        { text: '✓ @IsEmail() passed', delay: 250, duration: 400 },
-        { text: '✓ @IsKind() passed', delay: 250, duration: 400 },
-        { text: '✓ @IsGenerous() passed', delay: 250, duration: 400 },
-        { text: '✓ @HasPositiveVibes() passed', delay: 250, duration: 400 },
-        { text: '✓ @MinLength(10) validation passed', delay: 300, duration: 500 }
+        { text: '⟩ Running DTO validations...', delay: 60, duration: 120 },
+        { text: '✓ All validations passed', delay: 50, duration: 100 },
       ],
-      groupDelay: 1000,
-      persistent: false
+      groupDelay: 150,
+      persistent: true
     },
     {
       steps: [
-        { text: '⟩ Checking candidate.isAvailable...', delay: 400, duration: 700 },
-        { text: '✓ candidate.isAvailable = true', delay: 300, duration: 500 },
-        { text: '⟩ emailService.sendOffer(dto) executing...', delay: 500, duration: 800 },
-        { text: '✓ Offer email sent successfully', delay: 400, duration: 600 }
+        { text: '⟩ Checking candidate.isAvailable...', delay: 80, duration: 150 },
+        { text: '✓ candidate.isAvailable = true', delay: 50, duration: 100 },
+        { text: '⟩ emailService.sendOffer(dto) executing...', delay: 100, duration: 180 },
+        { text: '✓ Offer email sent successfully', delay: 60, duration: 120 }
       ],
-      groupDelay: 1500,
-      persistent: false
+      groupDelay: 200,
+      persistent: true
     },
     {
       steps: [
-        { text: '', delay: 400, duration: 0 },
-        { text: '┌─────────────────────────────────────────┐', delay: 0, duration: 100 },
-        { text: '│             RESPONSE:                   │', delay: 0, duration: 150 },
-        { text: '│                                         │', delay: 0, duration: 150 },
-        { text: '│      I will be in touch soon !!!        │', delay: 0, duration: 150 },
-        { text: '│                                         │', delay: 0, duration: 150 },
-        { text: '│                                         │', delay: 0, duration: 50 },
-        { text: '│       // Ready to contribute !!!        │', delay: 0, duration: 150 },
-        { text: '└─────────────────────────────────────────┘', delay: 0, duration: 100 },
-        { text: '', delay: 0, duration: 0 },
-        { text: '$ HTTP 200 OK', delay: 200, duration: 400 }
+        { text: '✓ Response: I am honoured to receive the offer!', delay: 100, duration: 200 },
+        { text: '$ HTTP 201 CREATED - Candidate hired successfully! 🎉', delay: 80, duration: 150 }
       ],
       groupDelay: 0,
       persistent: true
@@ -111,12 +91,12 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
 
     if (text === '') {
       setIsTyping(false);
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 50));
       return;
     }
 
     const chars = text.split('');
-    const typeSpeed = Math.max(20, duration / chars.length);
+    const typeSpeed = Math.max(8, duration / chars.length); // Much faster typing
 
     for (let i = 0; i <= chars.length; i++) {
       await new Promise(resolve => setTimeout(resolve, typeSpeed));
@@ -136,17 +116,17 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
       setCurrentText('');
       setIsTyping(false);
       setIsComplete(false);
+      setShowReadingPhase(false);
       return;
     }
 
     const runAnimation = async () => {
       setIsComplete(false);
+      setShowReadingPhase(false);
+      const allLines: string[] = [];
 
       for (let groupIndex = 0; groupIndex < stepGroups.length; groupIndex++) {
         const group = stepGroups[groupIndex];
-
-        // For persistent groups, build up the displayed lines
-        const groupLines: string[] = [];
 
         // Process each step in the group
         for (let stepIndex = 0; stepIndex < group.steps.length; stepIndex++) {
@@ -155,45 +135,54 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
           await new Promise(resolve => setTimeout(resolve, step.delay));
           await typeText(step.text, step.duration);
 
-          // For persistent groups, add to group lines
-          if (group.persistent) {
-            groupLines.push(step.text);
-            setDisplayedLines([...groupLines]);
-          }
+          // Add to all lines and update display
+          allLines.push(step.text);
+          setDisplayedLines([...allLines]);
 
           setCurrentText('');
-          await new Promise(resolve => setTimeout(resolve, 300));
+          await new Promise(resolve => setTimeout(resolve, 50)); // Very short pause between lines
         }
 
         // Wait for group delay before moving to next group
         await new Promise(resolve => setTimeout(resolve, group.groupDelay));
-
-        // Clear displayed lines for non-persistent groups
-        if (!group.persistent) {
-          setDisplayedLines([]);
-        }
       }
 
-      // Mark as complete and hired
+      // Show reading phase - let user read everything
       setIsComplete(true);
+      setShowReadingPhase(true);
+
+      // Wait for user to read (3 seconds), then clear and complete
       setTimeout(() => {
-        setHiring(false);
-        setHired(true);
-      }, 1000);
+        setDisplayedLines([]);
+        setCurrentText('');
+        setShowReadingPhase(false);
+
+        setTimeout(() => {
+          setHiring(false);
+          setHired(true);
+        }, 500);
+      }, 3000); // 3 seconds to read
     };
 
     runAnimation();
   }, [hiring, setHired, setHiring, stepGroups]);
 
   const renderTerminalContent = () => {
-    if (!hiring && !isComplete) {
+    if (!hiring && !isComplete && !showReadingPhase) {
       return (
-        <div className="text-gray-500 flex items-center">
-          <span className="">$masabinhok: </span>
-          <span className="animate-pulse duration-75 ml-1">user says yayy!!!</span>
-          <span>_</span>
-
-        </div>
+        <>
+          <div className="text-green-500 flex items-center mb-2">
+            <span className="animate-pulse">✓ Hiring process completed successfully!</span>
+          </div>
+          <div className="text-green-400 flex items-center mb-1">
+            <span>Response: I am hounoured to receive this offer.</span>
+          </div>
+          <div className="text-gray-500 flex items-center">
+            <span>$masabinhok: </span>
+            <span className="ml-1">Ready to contribute !!!</span>
+            <span className="animate-pulse ml-1">_</span>
+          </div>
+        </>
       );
     }
 
@@ -216,9 +205,16 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
 
         {/* Show processing indicator when between steps */}
         {hiring && !currentText && !isTyping && !isComplete && (
-          <div className="text-gray-600 flex items-center">
-            <span className="animate-pulse">$masabinhok: processing</span>
-            <span className="animate-pulse ml-1">_</span>
+          <div className="text-yellow-400 flex items-center">
+            <span className="animate-pulse">⚡ Processing at light speed...</span>
+            <span className="animate-bounce ml-2">⚡</span>
+          </div>
+        )}
+
+        {/* Show reading phase indicator */}
+        {showReadingPhase && (
+          <div className="text-cyan-400 flex items-center mt-4 pt-2 border-t border-gray-700">
+            <span className="animate-pulse">📖 Take a moment to review...</span>
           </div>
         )}
       </div>
@@ -233,7 +229,9 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
           <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          <span className="text-gray-400 text-sm ml-2">hiring-terminal v3.0.0</span>
+          <span className="text-gray-400 text-sm ml-2">
+            {hiring ? 'hiring-terminal v4.0.0 - TURBO MODE ⚡' : 'hiring-terminal v4.0.0'}
+          </span>
         </div>
       </div>
 
@@ -258,4 +256,5 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
   );
 };
 
-export default Terminal;  
+
+export default Terminal;
