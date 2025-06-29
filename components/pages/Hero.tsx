@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Code from '../Code'
 import Terminal from '../Terminal';
-import { CheckCircle, Loader2, Rocket, Sparkles, Zap } from 'lucide-react';
+import { CheckCircle, Loader2, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from '../Button';
 import MessageBox from '../MessageBox';
 import { useWindowSize } from 'react-use'
