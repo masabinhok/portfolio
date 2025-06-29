@@ -150,6 +150,7 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
       // Show reading phase - let user read everything
       setIsComplete(true);
       setShowReadingPhase(true);
+      
 
       // Wait for user to read (3 seconds), then clear and complete
       setTimeout(() => {
