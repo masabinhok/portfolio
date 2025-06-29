@@ -10,12 +10,11 @@ interface FormData {
 type FocusedField = 'email' | 'message' | null;
 
 export interface MessageBoxProps {
-  hired: boolean;
   setHiring: (hiring: boolean) => void;
   setShowMessageBox: (showMessageBox: boolean) => void;
 }
 
-const MessageBox = ({ hired, setHiring, setShowMessageBox }: MessageBoxProps) => {
+const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
   const { sendEmail, isLoading, error } = useEmail();
   const [formData, setFormData] = useState<FormData>({
     recruiterEmail: '',

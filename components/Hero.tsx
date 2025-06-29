@@ -103,7 +103,7 @@ const Hero = () => {
       </div>
 
       {
-        showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} hired={hired} setHiring={setHiring} /> : null
+        showMessageBox ? <MessageBox setShowMessageBox={setShowMessageBox} setHiring={setHiring} /> : null
       }
     </section>
   )

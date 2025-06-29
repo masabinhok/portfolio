@@ -1,6 +1,6 @@
 'use client'
 import { CodeTab } from '@/types/types'
-import { FileCode, Database, Code2 } from 'lucide-react'
+import {  Database, Code2 } from 'lucide-react'
 import React, { useState, useMemo } from 'react'
 import ControllerCode from './ControllerCode'
 import DataCode from './DataCode'
