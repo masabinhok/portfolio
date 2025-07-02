@@ -51,7 +51,7 @@ const Projects = () => {
   }
 
   return (
-    <section className='min-h-screen py-20 px-4'>
+    <section className='min-h-screen pt-20 pb-10 px-4'>
       {/* Header */}
       <div className='max-w-7xl mx-auto mb-16 text-center w-fit'>
         <h1 className='lowercase text-7xl font-bold text-soft'>
