@@ -23,7 +23,6 @@ interface Connection {
 const SkillNetwork = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
-  const [animationPhase, setAnimationPhase] = useState(0)
   const [isInitialized, setIsInitialized] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -151,7 +150,6 @@ const SkillNetwork = () => {
 
     const interval = setInterval(() => {
       currentPhaseIndex = (currentPhaseIndex + 1) % phases.length
-      setAnimationPhase(phases[currentPhaseIndex])
     }, 3000)
 
     return () => clearInterval(interval)
