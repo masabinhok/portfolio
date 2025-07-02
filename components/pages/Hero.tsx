@@ -12,17 +12,48 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
-  const [hired, setHired] = useState<boolean>(true);
+  const [hired, setHired] = useState<boolean>(false);
   const [hiring, setHiring] = useState<boolean>(false);
   const { width, height } = useWindowSize() // Add this for confetti
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const [particles, setParticles] = useState<Array<{
+    id: number;
+    left: number;
+    top: number;
+    duration: number;
+    delay: number;
+    moveX: number;
+    moveY: number;
+    color: string;
+  }>>([]);
 
   useEffect(() => {
     if (hired) {
       setShowConfetti(true);
     }
   }, [hired]);
+
+  // Initialize particles on client side only
+  useEffect(() => {
+    const colors = [
+      'bg-blue-400', 'bg-purple-400', 'bg-pink-400', 'bg-green-400',
+      'bg-yellow-400', 'bg-red-400', 'bg-indigo-400', 'bg-cyan-400',
+      'bg-emerald-400', 'bg-orange-400', 'bg-teal-400', 'bg-violet-400'
+    ];
+
+    const particleData = Array.from({ length: 25 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 6 + Math.random() * 4,
+      delay: i * 0.3,
+      moveX: Math.random() * 200 - 100,
+      moveY: Math.random() * 150 - 75,
+      color: colors[Math.floor(Math.random() * colors.length)],
+    }));
+    setParticles(particleData);
+  }, []);
 
 
   useEffect(() => {
@@ -101,26 +132,26 @@ const Hero = () => {
 
         </div>
 
-        
-        {/* Floating particles for ambiance */}
-        {[...Array(10)].map((_, i) => (
+
+        {/* Floating particles for ambiance scattered throughout the page */}
+        {particles.map((particle) => (
           <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-40"
+            key={particle.id}
+            className={`fixed w-1 h-1 ${particle.color} rounded-full opacity-40 pointer-events-none z-0`}
             animate={{
-              x: [0, 100, 0],
-              y: [0, -50, 0],
-              opacity: [0.4, 0.8, 0.4],
+              x: [0, particle.moveX, 0],
+              y: [0, particle.moveY, 0],
+              opacity: [0.3, 0.8, 0.3],
             }}
             transition={{
-              duration: 4 + i,
+              duration: particle.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5,
+              delay: particle.delay,
             }}
             style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + i * 10}%`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
           />
         ))}
