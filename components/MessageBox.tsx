@@ -14,7 +14,7 @@ export interface MessageBoxProps {
   setShowMessageBox: (showMessageBox: boolean) => void;
 }
 
-const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
+const MessageBox = ({ setHiring, setShowMessageBox }: MessageBoxProps) => {
   const { sendEmail, isLoading, error } = useEmail();
   const [formData, setFormData] = useState<FormData>({
     recruiterEmail: '',
@@ -46,7 +46,7 @@ const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
     try {
       // Send email with proper data structure
       await sendEmail({
-        to: '080bct069.sabin@pcampus.edu.np', 
+        to: '080bct069.sabin@pcampus.edu.np',
         type: 'job-offer',
         data: {
           recruiter: formData.recruiterEmail,
@@ -147,10 +147,10 @@ const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
                   onBlur={() => setFocusedField(null)}
                   placeholder="recruiter@company.com"
                   className={`w-full px-3 py-3 pl-10 border-2 rounded-lg transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none text-sm ${focusedField === 'email'
-                      ? 'border-blue-500 shadow-lg shadow-blue-500/20'
-                      : formData.recruiterEmail && formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.')
-                        ? 'border-green-400'
-                        : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-500 shadow-lg shadow-blue-500/20'
+                    : formData.recruiterEmail && formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.')
+                      ? 'border-green-400'
+                      : 'border-gray-200 hover:border-gray-300'
                     }`}
                   required
                 />
@@ -160,8 +160,8 @@ const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
                 {/* Email validation indicator */}
                 {formData.recruiterEmail && (
                   <div className={`absolute right-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.')
-                      ? 'text-green-500 scale-100'
-                      : 'text-red-400 scale-110'
+                    ? 'text-green-500 scale-100'
+                    : 'text-red-400 scale-110'
                     }`}>
                     {formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.') ? (
                       <Check size={16} />
@@ -191,10 +191,10 @@ const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
                   rows={4}
                   maxLength={500}
                   className={`w-full px-3 py-3 border-2 rounded-lg transition-all duration-300 bg-gray-50 text-gray-700 focus:bg-white focus:outline-none resize-none text-sm ${focusedField === 'message'
-                      ? 'border-purple-500 shadow-lg shadow-purple-500/20'
-                      : formData.offerMessage.length > 10
-                        ? 'border-green-400'
-                        : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-purple-500 shadow-lg shadow-purple-500/20'
+                    : formData.offerMessage.length > 10
+                      ? 'border-green-400'
+                      : 'border-gray-200 hover:border-gray-300'
                     }`}
                   required
                 />
@@ -239,12 +239,12 @@ const MessageBox = ({setHiring, setShowMessageBox }: MessageBoxProps) => {
             {/* Form Validation Hints */}
             <div className="flex items-center gap-3 text-xs flex-wrap">
               <div className={`flex items-center gap-1.5 ${formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.')
-                  ? 'text-green-600'
-                  : 'text-gray-400'
+                ? 'text-green-600'
+                : 'text-gray-400'
                 }`}>
                 <div className={`w-1.5 h-1.5 rounded-full ${formData.recruiterEmail.includes('@') && formData.recruiterEmail.includes('.')
-                    ? 'bg-green-500'
-                    : 'bg-gray-300'
+                  ? 'bg-green-500'
+                  : 'bg-gray-300'
                   }`}></div>
                 Valid email
               </div>
