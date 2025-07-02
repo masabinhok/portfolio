@@ -172,12 +172,6 @@ const Terminal = ({ hiring, setHiring, setHired }: TerminalProps) => {
     if (!hiring && !isComplete && !showReadingPhase) {
       return (
         <>
-          <div className="text-green-500 flex items-center mb-2">
-            <span className="animate-pulse">✓ Hiring process completed successfully!</span>
-          </div>
-          <div className="text-green-400 flex items-center mb-1">
-            <span>Response: I am hounoured to receive this offer.</span>
-          </div>
           <div className="text-gray-500 flex items-center">
             <span>$masabinhok: </span>
             <span className="ml-1">Ready to contribute !!!</span>

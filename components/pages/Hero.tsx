@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
   const [showMessageBox, setShowMessageBox] = useState<boolean>(false);
-  const [hired, setHired] = useState<boolean>(false);
+  const [hired, setHired] = useState<boolean>(true);
   const [hiring, setHiring] = useState<boolean>(false);
   const { width, height } = useWindowSize() // Add this for confetti
 
