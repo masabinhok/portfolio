@@ -44,7 +44,7 @@ export const projects: Project[] = [
   {
     id: 3,
     name: 'conexusHub',
-    url: 'https://conexusHub.vercel.app',
+    url: 'https://conexus-hub.vercel.app',
     github: 'https://github.com/masabinhok/conexusHub',
     description: 'Explore or list services and products in a user-friendly marketplace.',
     tech: ['React.js', 'Node.js', 'Cloudinary', 'MongoDB'],
