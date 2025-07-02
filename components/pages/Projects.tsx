@@ -1,41 +1,10 @@
 
 'use client'
-import { ExternalLink, Github, Zap, Code, Palette, Database, Globe, Smartphone, Contact } from 'lucide-react'
+import { ExternalLink, Github, Zap, Code, Palette, Database, Globe, Smartphone, Contact, Heart } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import ExceptionalButton from '../Button'
-
-// Types
-type ProjectCategory = 'Game' | 'Productivity' | 'Finance' | 'Design' | 'Mobile' | 'Analytics'
-type ProjectStatus = 'Live' | 'Beta' | 'Development'
-
-interface Project {
-  id: number
-  name: string
-  url: string
-  github: string
-  description: string
-  tech: string[]
-  category: ProjectCategory
-  color: string
-  icon: string
-  status: ProjectStatus
-}
-
-// Enhanced projects data with more details
-const projects: Project[] = [
-  {
-    id: 1,
-    name: 'e4.learnChess',
-    url: 'https://e4-learnchess.vercel.app',
-    github: 'https://github.com/masabinhok/e4',
-    description: 'A chess opening trainer where you can practice lines by pasting PGNs, record your own custom sequences, or study curated openings. Features multiple practice modes and an admin panel for content management.',
-    tech: ['Next.js', 'Nest.js', 'Chess.js', 'MongoDB'],
-    category: 'Game',
-    color: 'from-amber-400 to-orange-600',
-    icon: '♟️',
-    status: 'Live'
-  },
-]
+import { ProjectCategory, ProjectStatus } from '@/types/types'
+import { projects } from '@/constants/constants'
 
 const getCategoryIcon = (category: ProjectCategory) => {
   const icons: Record<ProjectCategory, typeof Code> = {
@@ -44,7 +13,8 @@ const getCategoryIcon = (category: ProjectCategory) => {
     Finance: Database,
     Design: Palette,
     Mobile: Smartphone,
-    Analytics: Globe
+    Analytics: Globe,
+    Love: Heart
   }
   return icons[category] || Code
 }
@@ -92,7 +62,7 @@ const Projects = () => {
       </div>
 
       {/* Projects Grid */}
-      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 '>
         {projects.map((project, index) => {
           const CategoryIcon = getCategoryIcon(project.category)
 
@@ -105,8 +75,9 @@ const Projects = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Main Card */}
-              <div className='relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl hover:shadow-purple-500/20'>
+              <div className='relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden transform transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl hover:shadow-purple-500/20 h-full'>
 
+                <div></div>
                 {/* Animated Background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
 
@@ -151,52 +122,56 @@ const Projects = () => {
                 </div>
 
                 {/* Content */}
-                <div className='p-6 space-y-4'>
-                  <div className='flex items-center justify-between'>
-                    <h3 className='text-xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300'>
-                      {project.name}
-                    </h3>
-                    <span className='text-sm text-gray-400 bg-gray-800/50 px-2 py-1 rounded'>
-                      {project.category}
-                    </span>
-                  </div>
-
-                  <p className='text-gray-300 text-sm leading-relaxed'>
-                    {project.description}
-                  </p>
-
-                  {/* Tech Stack */}
-                  <div className='flex flex-wrap gap-2'>
-                    {project.tech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className='px-2 py-1 bg-gray-800/50 text-gray-300 text-xs rounded-md border border-gray-700/50 hover:border-blue-500/50 transition-colors duration-300'
-                      >
-                        {tech}
+                <div className='p-6 flex flex-col justify-between min-h-[250px]'>
+                  <div className='space-y-4'>
+                    <div className='flex items-center justify-between'>
+                      <h3 className='text-xl font-bold text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300'>
+                        {project.name}
+                      </h3>
+                      <span className='text-sm text-gray-400 bg-gray-800/50 px-2 py-1 rounded'>
+                        {project.category}
                       </span>
-                    ))}
+                    </div>
+
+                    <p className='text-gray-300 text-sm leading-relaxed'>
+                      {project.description}
+                    </p>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className='flex gap-3 pt-4 relative z-10'>
-                    <a
-                      href={project.url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 flex-1 justify-center'
-                    >
-                      <ExternalLink className='w-4 h-4' />
-                      <span>Live Demo</span>
-                    </a>
+                  <div className='space-y-4'>
+                    {/* Tech Stack */}
+                    <div className='flex flex-wrap gap-2'>
+                      {project.tech.map((tech, i) => (
+                        <span
+                          key={i}
+                          className='px-2 py-1 bg-gray-800/50 text-gray-300 text-xs rounded-md border border-gray-700/50 hover:border-blue-500/50 transition-colors duration-300'
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
 
-                    <a
-                      href={project.github}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg border border-gray-700 hover:border-gray-600'
-                    >
-                      <Github className='w-4 h-4' />
-                    </a>
+                    {/* Action Buttons */}
+                    <div className='flex gap-3 relative z-10'>
+                      <a
+                        href={project.url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 flex-1 justify-center'
+                      >
+                        <ExternalLink className='w-4 h-4' />
+                        <span>Live Demo</span>
+                      </a>
+
+                      <a
+                        href={project.github}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg border border-gray-700 hover:border-gray-600'
+                      >
+                        <Github className='w-4 h-4' />
+                      </a>
+                    </div>
                   </div>
                 </div>
 
