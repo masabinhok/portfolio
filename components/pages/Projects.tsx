@@ -51,14 +51,11 @@ const Projects = () => {
   return (
     <section className='min-h-screen py-20 px-4'>
       {/* Header */}
-      <div className='max-w-7xl mx-auto mb-16 text-center'>
-        <h1 className='text-5xl md:text-7xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2'>
-          Featured Projects
+      <div className='max-w-7xl mx-auto mb-16 text-center w-fit'>
+        <h1 className='lowercase text-7xl font-bold text-soft'>
+          featured projects.
         </h1>
-        <p className='text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed'>
-          Discover my latest creations - ideas turned into art.
-        </p>
-        <div className='w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto mt-8 rounded-full'></div>
+        <h3 className='mt-1 text-end text-muted'>I turn <span className='italic text-white'>ideas</span> in my head into <span className='italic text-white'>code.</span></h3>
       </div>
 
       {/* Projects Grid */}

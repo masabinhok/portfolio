@@ -1,12 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import Code from '../Code'
+import SkillNetwork from '../SkillNetwork'
 import Terminal from '../Terminal';
 import { CheckCircle, Loader2, Sparkles, Zap } from 'lucide-react';
 import ExceptionalButton from '../Button';
 import MessageBox from '../MessageBox';
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
+import { motion } from 'framer-motion'
 
 
 const Hero = () => {
@@ -95,10 +96,34 @@ const Hero = () => {
         {/* Let&apos;s build a console like simulation here. */}
         <div className='w-full flex flex-col items-end'>
           {
-            hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <Code />
+            hiring || hired ? <Terminal setHiring={setHiring} hiring={hiring} setHired={setHired} /> : <SkillNetwork />
           }
 
         </div>
+
+        
+        {/* Floating particles for ambiance */}
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-40"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              opacity: [0.4, 0.8, 0.4],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            }}
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${30 + i * 10}%`,
+            }}
+          />
+        ))}
       </div>
 
       {
