@@ -24,6 +24,7 @@ const SkillNetwork = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const [animationPhase, setAnimationPhase] = useState(0)
+  const [isInitialized, setIsInitialized] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Define skill nodes with their positions and connections
@@ -124,8 +125,27 @@ const SkillNetwork = () => {
     })
   })
 
+  // Initialize container dimensions
+  useEffect(() => {
+    const initializeContainer = () => {
+      if (containerRef.current) {
+        setIsInitialized(true)
+      }
+    }
+
+    // Check immediately
+    initializeContainer()
+
+    // Also check after a short delay to ensure container is fully rendered
+    const timer = setTimeout(initializeContainer, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   // Animation phases
   useEffect(() => {
+    if (!isInitialized) return
+
     const phases = [0, 1, 2, 3]
     let currentPhaseIndex = 0
 
@@ -135,15 +155,23 @@ const SkillNetwork = () => {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [isInitialized])
 
   const getNodePosition = (node: SkillNode) => {
     const container = containerRef.current
-    if (!container) return { x: node.x * 3, y: node.y * 2.5 } // fallback positions
+    if (!container || !isInitialized) {
+      // Use consistent fallback positions based on the expected container size
+      const fallbackWidth = 400
+      const fallbackHeight = 300
+      return {
+        x: (node.x / 100) * (fallbackWidth - 100) + 50,
+        y: (node.y / 100) * (fallbackHeight - 100) + 50
+      }
+    }
 
     const rect = container.getBoundingClientRect()
-    const width = rect.width > 0 ? rect.width : 400 // fallback width
-    const height = rect.height > 0 ? rect.height : 300 // fallback height
+    const width = rect.width > 0 ? rect.width : 400
+    const height = rect.height > 0 ? rect.height : 300
 
     return {
       x: (node.x / 100) * (width - 100) + 50,
@@ -202,7 +230,7 @@ const SkillNetwork = () => {
             </filter>
           </defs>
 
-          {connections.map((connection, index) => {
+          {isInitialized && connections.map((connection, index) => {
             const fromNode = skillNodes.find(n => n.id === connection.from)
             const toNode = skillNodes.find(n => n.id === connection.to)
 
@@ -235,7 +263,7 @@ const SkillNetwork = () => {
         </svg>
 
         {/* Skill Nodes */}
-        {skillNodes.map((node, index) => {
+        {isInitialized && skillNodes.map((node, index) => {
           const position = getNodePosition(node)
           const isHighlighted = isNodeHighlighted(node.id)
 
