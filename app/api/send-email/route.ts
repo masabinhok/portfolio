@@ -12,6 +12,9 @@ export async function POST(request: NextRequest) {
       case 'job-offer':
         emailContent = emailTemplates.jobOffer(data.recruiter, data.offerMessage);
         break;
+      case 'contact':
+        emailContent = emailTemplates.contact(data.name, data.email, data.message);
+        break;
       default:
         return NextResponse.json({ message: 'Invalid email type' }, { status: 400 });
     }

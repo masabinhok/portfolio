@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react'
 import ExceptionalButton from '../Button'
 import { ProjectCategory, ProjectStatus } from '@/types/types'
 import { projects } from '@/constants/constants'
+import ContactBox from '../ContactBox'
 
 const getCategoryIcon = (category: ProjectCategory) => {
   const icons: Record<ProjectCategory, typeof Code> = {
@@ -31,6 +32,7 @@ const getStatusColor = (status: ProjectStatus) => {
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null)
   const [isClient, setIsClient] = useState(false)
+  const [showContactBox, setShowContactBox] = useState<boolean>(false);
 
   useEffect(() => {
     setIsClient(true)
@@ -188,12 +190,18 @@ const Projects = () => {
         <div className='bg-gradient-to-r from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-white/10 rounded-2xl p-8'>
           <h2 className='text-3xl font-bold text-white mb-4'>Interested in collaborating?</h2>
           <p className='text-gray-300 mb-6'>Let&apos;s build something amazing together</p>
-          <ExceptionalButton size='md'>
+          <ExceptionalButton onClick={() => setShowContactBox(true)} size='md'>
             <Contact className='w-5 h-5' />
             <span>Get In Touch</span>
           </ExceptionalButton>
         </div>
       </div>
+
+      {
+        showContactBox && (
+          <ContactBox setShowContactBox={setShowContactBox} />
+        )
+      }
     </section>
   )
 }

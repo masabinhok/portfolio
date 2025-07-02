@@ -29,4 +29,29 @@ export const emailTemplates = {
       </div>
     `,
   }),
+  
+  contact: (name: string, email: string, message: string) => ({
+    subject: `New Contact Form Message from ${name}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #059669;">New Contact Message 📨</h1>
+        <p>Hello Sabin,</p>
+        <p>You have received a new message through your portfolio contact form:</p>
+        
+        <div style="background: #f0fdf4; border-left: 4px solid #059669; padding: 20px; margin: 20px 0; border-radius: 4px;">
+          <h3 style="margin-top: 0; color: #065f46;">Contact Details:</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #d1fae5;">
+            ${message.replace(/\n/g, '<br>')}
+          </div>
+        </div>
+        
+        <p style="color: #6b7280; font-size: 14px;">
+          This message was sent from your portfolio website contact form.
+        </p>
+      </div>
+    `,
+  }),
 };

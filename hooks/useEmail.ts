@@ -2,10 +2,13 @@ import { useState } from 'react';
 
 interface EmailData {
   to: string;
-  type: 'welcome' | 'job-offer';
+  type: 'welcome' | 'job-offer' | 'contact';
   data: {
-    recruiter: string, 
-    offerMessage: string,
+    recruiter?: string;
+    offerMessage?: string;
+    name?: string;
+    email?: string;
+    message?: string;
   };
 }
 
