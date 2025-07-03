@@ -114,7 +114,7 @@ const Hero = () => {
 
           >
             <h1 onMouseEnter={() => setShowProfileCard(true)}
-              className='lowercase text-7xl font-bold text-soft cursor-pointer transition-all duration-300 hover:text-blue-400'
+              className={`lowercase text-7xl font-bold cursor-pointer transition-all duration-300 ${showProfileCard ? 'text-blue-400' : 'text-soft'}`}
             >
               Sabin Shrestha.
             </h1>
@@ -174,7 +174,7 @@ const Hero = () => {
                           Full-Stack Developer
                         </motion.span>
                         <motion.span
-                        
+
                           className="absolute top-0 left-0 block"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{
