@@ -1,0 +1,11 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running ESLint..."
+npm run lint || { echo "❌ Lint failed. Commit aborted."; exit 1; }
+
+
+echo "🏗️ Building project..."
+npm run build || { echo "❌ Build failed. Commit aborted."; exit 1; }
+
+echo "✅ All checks passed. Proceeding with commit..."
