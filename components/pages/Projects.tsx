@@ -54,7 +54,7 @@ const Projects = () => {
     <section className='min-h-screen pt-20 pb-10 px-4'>
       {/* Header */}
       <div className='max-w-7xl mx-auto mb-16 text-center w-fit'>
-        <h1 className='lowercase text-7xl font-bold text-soft'>
+        <h1 className='lowercase text-7xl font-bold text-soft max-sm:text-5xl'>
           featured projects.
         </h1>
         <h3 className='mt-1 text-end text-muted'>I turn <span className='italic text-white'>ideas</span> in my head into <span className='italic text-white'>code.</span></h3>

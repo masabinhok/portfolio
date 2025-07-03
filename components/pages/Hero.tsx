@@ -103,10 +103,10 @@ const Hero = () => {
       {/* Add confetti when hired */}
       {showConfetti && <Confetti width={width} height={height} />}
 
-      <div className='flex gap-10 items-center min-h-screen'>
+      <div className='flex gap-10 items-center min-h-screen max-md:flex-col max-md:gap-0'>
         <div className='flex flex-col p-2 mb-10 w-full'>
           {/* Header and subheader */}
-          <h1 className='lowercase text-7xl font-bold text-soft'>
+          <h1 className='lowercase text-7xl font-bold text-soft max-sm:text-5xl'>
             Sabin Shrestha.
           </h1>
           <h3 className='text-right text-muted'>I don&apos;t just <span className='italic text-heading'>build APIs</span>, I  <span className='italic text-heading'>build foundations.</span></h3>
