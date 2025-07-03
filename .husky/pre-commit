@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 echo "🔍 Running ESLint..."
 npm run lint || { echo "❌ Lint failed. Commit aborted."; exit 1; }
 
