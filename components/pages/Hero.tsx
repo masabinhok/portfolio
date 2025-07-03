@@ -8,6 +8,8 @@ import MessageBox from '../MessageBox';
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 import { motion } from 'framer-motion'
+import sabin from '@/public/sabin.jpg'
+import Image from 'next/image';
 
 
 const Hero = () => {
@@ -16,6 +18,7 @@ const Hero = () => {
   const [hiring, setHiring] = useState<boolean>(false);
   const { width, height } = useWindowSize()
   const [showEmail, setShowEmail] = useState<boolean>(false);
+  const [flipAvatar, setFlipAvatar] = useState<boolean>(false);
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showProfileCard, setShowProfileCard] = useState<boolean>(false);
@@ -143,10 +146,55 @@ const Hero = () => {
                 />
 
                 <div className="flex items-start gap-4 relative z-10">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                      SS
-                    </div>
+                  <div
+                    className="relative w-16 h-16 cursor-pointer"
+                    onMouseEnter={() => setFlipAvatar(true)}
+                    onMouseLeave={() => setFlipAvatar(false)}
+                  >
+                    {/* Avatar container with flip animation */}
+                    <motion.div
+                      className="relative w-full h-full"
+                      style={{ transformStyle: "preserve-3d" }}
+                      animate={{ rotateY: flipAvatar ? 180 : 0 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                    >
+                      {/* Front side - Real photo */}
+                      <div
+                        className="absolute inset-0 rounded-full overflow-hidden border-2 border-blue-400"
+                        style={{ backfaceVisibility: "hidden" }}
+                      >
+                        <Image
+                          src={sabin}
+                          alt="Sabin Shrestha"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback if image doesn't exist
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">🚀</div>';
+                          }}
+                        />
+                      </div>
+
+                      {/* Back side - Real photo (same image) */}
+                      <div
+                        className="absolute inset-0 rounded-full overflow-hidden border-2 border-purple-400"
+                        style={{
+                          backfaceVisibility: "hidden",
+                          transform: "rotateY(180deg)"
+                        }}
+                      >
+                        <Image
+                          src={sabin}
+                          alt="Sabin Shrestha"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback if image doesn't exist
+                            e.currentTarget.style.display = 'none';
+                            e.currentTarget.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">🚀</div>';
+                          }}
+                        />
+                      </div>
+                    </motion.div>
 
                   </div>
                   <div className="flex-1">
