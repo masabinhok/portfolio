@@ -54,3 +54,23 @@ export const projects: Project[] = [
     status: 'Live'
   }
 ]
+
+
+export const Navlinks = [
+  {
+    name: 'home',
+    link: '/'
+  },
+  {
+    'name': 'dsa',
+    'link': '/dsa',
+  },
+  {
+    'name': 'blogs',
+    'link': '/blogs',
+  }, 
+  {
+    'name': 'projects',
+    'link': '/projects'
+  }
+]
