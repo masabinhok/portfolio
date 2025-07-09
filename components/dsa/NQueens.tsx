@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RotateCcw, Zap, SkipForward, Crown, Play } from 'lucide-react'
+import { RotateCcw, Zap, SkipForward, Crown } from 'lucide-react'
 
 const NQueens = () => {
   const createEmptyBoard = (size: number) =>
@@ -9,7 +9,6 @@ const NQueens = () => {
 
   const [boardSize, setBoardSize] = useState<number>(4)
   const [board, setBoard] = useState<string[][]>(createEmptyBoard(4))
-  const [originalBoard, setOriginalBoard] = useState<string[][]>(createEmptyBoard(4))
   const [solutions, setSolutions] = useState<string[][][]>([])
   const [currentSolution, setCurrentSolution] = useState<number>(0)
   const [isVisualizing, setIsVisualizing] = useState<boolean>(false)
@@ -18,7 +17,7 @@ const NQueens = () => {
   const [currentCell, setCurrentCell] = useState<{ row: number, col: number } | null>(null)
   const [backtrackCell, setBacktrackCell] = useState<{ row: number, col: number } | null>(null)
   const [attackedCells, setAttackedCells] = useState<Set<string>>(new Set())
-  const [solvingSpeed, setSolvingSpeed] = useState<number>(500)
+  const [solvingSpeed, setSolvingSpeed] = useState<number>(250)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [solutionCount, setSolutionCount] = useState<number>(0)
   const solveRef = useRef<{ shouldStop: boolean }>({ shouldStop: false })
@@ -147,7 +146,7 @@ const NQueens = () => {
 
     const boardCopy = createEmptyBoard(boardSize)
     setBoard(boardCopy)
-    setOriginalBoard(boardCopy)
+
 
     const foundSolutions: string[][][] = []
     await solve(boardCopy, 0, boardSize, foundSolutions)
@@ -227,7 +226,6 @@ const NQueens = () => {
   const resetBoard = () => {
     const emptyBoard = createEmptyBoard(boardSize)
     setBoard(emptyBoard)
-    setOriginalBoard(emptyBoard)
     setSolutions([])
     setSolutionCount(0)
     setCurrentSolution(0)
@@ -245,7 +243,7 @@ const NQueens = () => {
     setBoardSize(newSize)
     const emptyBoard = createEmptyBoard(newSize)
     setBoard(emptyBoard)
-    setOriginalBoard(emptyBoard)
+
     setSolutions([])
     setSolutionCount(0)
     setCurrentSolution(0)
@@ -600,7 +598,7 @@ const NQueens = () => {
               </AnimatePresence>
             </motion.div>
 
-           
+
           </motion.div>
         </div>
 
