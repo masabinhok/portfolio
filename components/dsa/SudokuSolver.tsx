@@ -429,17 +429,17 @@ const SudokuSolver = () => {
   }
 
   return (
-    <section className='min-h-screen w-screen p-4 flex flex-col items-center justify-center'>
+    <section className='h-screen w-screen p-4 flex flex-col items-center justify-center overflow-hidden'>
       <motion.div
-        className='w-full max-w-6xl flex flex-col items-center gap-6'
+        className='w-full max-w-7xl flex flex-col items-center gap-4 h-full'
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {/* Compact Header */}
-        <div className='text-center space-y-2'>
+        <div className='text-center space-y-1 flex-shrink-0'>
           <motion.h1
-            className='text-4xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent'
+            className='text-3xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent'
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
@@ -447,7 +447,7 @@ const SudokuSolver = () => {
             Sudoku Solver
           </motion.h1>
           <motion.p
-            className='text-base text-gray-700 font-medium'
+            className='text-sm text-gray-700 font-medium'
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
@@ -457,20 +457,111 @@ const SudokuSolver = () => {
         </div>
 
         {/* Main Content - Grid and Controls Side by Side */}
-        <div className='flex items-start gap-8 w-full justify-center'>
-          {/* Left Side - Grid */}
+        <div className='flex items-start gap-6 w-full justify-center flex-1 min-h-0'>
+          {/* Left Side - Status and Sample Puzzles */}
           <motion.div
-            className='relative'
+            className='flex flex-col gap-4 w-60'
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            {/* Status Card */}
+            <motion.div
+              className='w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50'
+              layout
+            >
+              <div className='text-center space-y-3'>
+                <h3 className='text-sm font-bold text-gray-800'>Status</h3>
+                <motion.div
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-500 ${isSolved
+                    ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 border border-emerald-200'
+                    : (isVisualizing || !isEditable)
+                      ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200'
+                      : 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200'
+                    }`}
+                  layout
+                >
+                  <motion.div
+                    className={`w-2 h-2 rounded-full ${isSolved ? 'bg-emerald-500' : (isVisualizing || !isEditable) ? 'bg-blue-500' : 'bg-gray-500'}`}
+                    animate={{
+                      scale: (isVisualizing || !isEditable) && !isSolved ? [1, 1.2, 1] : 1,
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: (isVisualizing || !isEditable) && !isSolved ? Infinity : 0
+                    }}
+                  />
+                  <motion.span layout className='text-sm'>
+                    {isSolved ? 'Solved!' : (isVisualizing || !isEditable) ? 'Solving...' : 'Ready'}
+                  </motion.span>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Sample Puzzles Card */}
+            <motion.div
+              className='w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50'
+              layout
+            >
+              <h3 className='text-sm font-bold text-gray-800 text-center mb-3'>Sample Puzzles</h3>
+              <AnimatePresence mode="wait">
+                {(!isVisualizing && isEditable) ? (
+                  <motion.div
+                    key="sample-buttons"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className='space-y-2'
+                  >
+                    <button
+                      onClick={() => loadSamplePuzzle('easy')}
+                      className='w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5'
+                    >
+                      Easy Puzzle
+                    </button>
+                    <button
+                      onClick={() => loadSamplePuzzle('medium')}
+                      className='w-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5'
+                    >
+                      Medium Puzzle
+                    </button>
+                    <button
+                      onClick={() => loadSamplePuzzle('hard')}
+                      className='w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5'
+                    >
+                      Hard Puzzle
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="sample-disabled"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className='text-center text-gray-500 text-xs py-3'
+                  >
+                    Disabled during solving
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+
+          {/* Center - Grid */}
+          <motion.div
+            className='relative flex-shrink-0'
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
           >
             {/* Grid Shadow/Glow Effect */}
-            <div className='absolute -inset-3 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-blue-500/20 rounded-2xl blur-lg'></div>
+            <div className='absolute -inset-2 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-blue-500/20 rounded-xl blur-lg'></div>
 
             {/* Main Grid */}
-            <div className='relative bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-white/50'>
-              <div className='grid grid-cols-9 gap-0 p-2 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl'>
+            <div className='relative bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-xl border border-white/50'>
+              <div className='grid grid-cols-9 gap-0 p-2 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg'>
                 {sudoku.map((row, rowIndex) =>
                   row.map((cell, colIndex) => (
                     <motion.input
@@ -504,175 +595,170 @@ const SudokuSolver = () => {
             </div>
           </motion.div>
 
-          {/* Right Side - Controls */}
+          {/* Right Side - Controls and Speed */}
           <motion.div
-            className='flex flex-col gap-6 items-center max-w-xs'
+            className='flex flex-col gap-4 w-60'
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.0, duration: 0.6 }}
           >
-            {/* Progress and Status */}
-            <div className='w-full space-y-4'>
-              {/* Status */}
-              <div className='text-center'>
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-500 ${isSolved
-                  ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-800 border-2 border-emerald-200'
-                  : (isVisualizing || !isEditable)
-                    ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-200'
-                    : 'bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border-2 border-gray-200'
-                  }`}>
-                  <motion.div
-                    className={`w-2 h-2 rounded-full ${isSolved ? 'bg-emerald-500' : (isVisualizing || !isEditable) ? 'bg-blue-500' : 'bg-gray-500'
-                      }`}
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  {isSolved ? '✅ Solved!' : (isVisualizing || !isEditable) ? '🔄 Solving...' : '🟢 Ready'}
-                </div>
-              </div>
-
-              {/* Error Message */}
-              <AnimatePresence>
-                {errorMessage && (
-                  <motion.div
-                    className='text-center'
-                    initial={{ opacity: 0, y: -10, height: 0 }}
-                    animate={{ opacity: 1, y: 0, height: 'auto' }}
-                    exit={{ opacity: 0, y: -10, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className='relative inline-flex items-center gap-2 px-4 py-2 pr-8 rounded-lg text-sm font-medium bg-gradient-to-r from-red-100 to-red-200 text-red-800 border-2 border-red-300'>
-                      <span className='text-red-600'>⚠️</span>
-                      <span className='text-xs leading-tight max-w-xs'>{errorMessage}</span>
+            {/* Main Controls Card */}
+            <motion.div
+              className='w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50'
+              layout
+            >
+              <h3 className='text-sm font-bold text-gray-800 text-center mb-3'>Controls</h3>
+              <div className='space-y-2'>
+                <AnimatePresence mode="wait">
+                  {(!isVisualizing && isEditable) ? (
+                    <motion.div
+                      key="main-controls"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className='space-y-2'
+                    >
                       <button
-                        onClick={() => setErrorMessage('')}
-                        className='absolute right-2 top-1/2 transform -translate-y-1/2 text-red-600 hover:text-red-800 text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-300/30 transition-colors duration-200'
-                        title='Dismiss error'
+                        onClick={solveSudoku}
+                        className='w-full group flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs'
                       >
-                        ×
+                        <Zap size={14} className='group-hover:scale-110 transition-transform duration-300' />
+                        Visualize Algorithm
                       </button>
+
+                      <button
+                        onClick={solveInstantly}
+                        className='w-full group flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs'
+                      >
+                        <FastForward size={14} className='group-hover:scale-110 transition-transform duration-300' />
+                        Skip to Solution
+                      </button>
+
+                      <div className='grid grid-cols-2 gap-2 pt-1'>
+                        <button
+                          onClick={resetToOriginal}
+                          className='group flex items-center justify-center gap-1 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-3 py-2 rounded-lg font-medium transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5 text-xs'
+                        >
+                          <RotateCcw size={12} className='group-hover:rotate-180 transition-transform duration-500' />
+                          Reset
+                        </button>
+
+                        <button
+                          onClick={clearSudoku}
+                          className='group flex items-center justify-center gap-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5 text-xs'
+                        >
+                          <RotateCcw size={12} className='group-hover:rotate-180 transition-transform duration-500' />
+                          Clear
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="stop-control"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className='space-y-2'
+                    >
+                      <button
+                        onClick={stopSolving}
+                        className='w-full group flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-xs'
+                      >
+                        <SkipForward size={14} className='group-hover:scale-110 transition-transform duration-300' />
+                        Stop Solving
+                      </button>
+
+                      <div className='h-12 flex items-center justify-center text-gray-500 text-xs'>
+                        Other controls disabled
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            {/* Speed Settings Card */}
+            <motion.div
+              className='w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50'
+              layout
+            >
+              <h3 className='text-sm font-bold text-gray-800 text-center mb-3'>Speed Settings</h3>
+              <AnimatePresence mode="wait">
+                {!isVisualizing ? (
+                  <motion.div
+                    key="speed-active"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className='space-y-3'
+                  >
+                    <div className='text-center'>
+                      <span className='text-xs font-medium text-gray-700'>
+                        Speed: {solvingSpeed}ms
+                      </span>
                     </div>
+                    <input
+                      type='range'
+                      min='0'
+                      max='500'
+                      value={solvingSpeed}
+                      onChange={(e) => setSolvingSpeed(Number(e.target.value))}
+                      className='w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer slider'
+                    />
+                    <div className='flex justify-between text-xs text-gray-500'>
+                      <span>Fast</span>
+                      <span>Slow</span>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="speed-inactive"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className='text-center text-gray-500 text-xs py-3'
+                  >
+                    Can&apos;t alter during visualization
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
-
-            {/* Controls */}
-            <div className='flex flex-col gap-3 w-full'>
-              {(!isVisualizing && isEditable) ? (
-                <>
-                  <button
-                    onClick={solveSudoku}
-                    disabled={!isEditable}
-                    className='group flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:hover:transform-none'
-                  >
-                    <Zap size={18} className='group-hover:scale-110 transition-transform duration-300' />
-                    Visualize Algorithm
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      solveInstantly();
-                    }}
-                    disabled={!isEditable}
-                    className='group flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:hover:transform-none'
-                  >
-                    <FastForward size={18} className='group-hover:scale-110 transition-transform duration-300' />
-                    Skip to Solution
-                  </button>
-
-                  <button
-                    onClick={resetToOriginal}
-                    disabled={!isEditable}
-                    className='group flex items-center justify-center gap-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:hover:transform-none'
-                  >
-                    <RotateCcw size={18} className='group-hover:rotate-180 transition-transform duration-500' />
-                    Reset
-                  </button>
-
-                  <button
-                    onClick={clearSudoku}
-                    disabled={!isEditable}
-                    className='group flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:hover:transform-none'
-                  >
-                    <RotateCcw size={18} className='group-hover:rotate-180 transition-transform duration-500' />
-                    Clear All
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={stopSolving}
-                    className='group flex items-center justify-center gap-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                  >
-                    <SkipForward size={18} className='group-hover:scale-110 transition-transform duration-300' />
-                    Stop
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Sample Puzzles */}
-            {(!isVisualizing && isEditable) && (
-              <div className='w-full space-y-3'>
-                <h4 className='text-sm font-bold text-gray-800 text-center'>Try Sample Puzzles</h4>
-                <div className='grid grid-cols-3 gap-2'>
-                  <button
-                    onClick={() => loadSamplePuzzle('easy')}
-                    disabled={!isEditable}
-                    className='bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5 disabled:hover:transform-none'
-                  >
-                    Easy
-                  </button>
-                  <button
-                    onClick={() => loadSamplePuzzle('medium')}
-                    disabled={!isEditable}
-                    className='bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5 disabled:hover:transform-none'
-                  >
-                    Medium
-                  </button>
-                  <button
-                    onClick={() => loadSamplePuzzle('hard')}
-                    disabled={!isEditable}
-                    className='bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 shadow hover:shadow-lg transform hover:-translate-y-0.5 disabled:hover:transform-none'
-                  >
-                    Hard
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Speed Settings */}
-            <div className='w-full space-y-3'>
-              <AnimatePresence>
-                <motion.div
-                  className='space-y-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-lg'
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <label className='block text-sm font-medium text-gray-700'>
-                    Animation Speed: {solvingSpeed}ms
-                  </label>
-                  <input
-                    type='range'
-                    min='0'
-                    max='500'
-                    value={solvingSpeed}
-                    onChange={(e) => setSolvingSpeed(Number(e.target.value))}
-                    className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider'
-                    disabled={isVisualizing}
-                  />
-                  <div className='flex justify-between text-xs text-gray-500'>
-                    <span>Fast (0ms)</span>
-                    <span>Slow (500ms)</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
+
+        {/* Error Toast Notification */}
+        <AnimatePresence>
+          {errorMessage && (
+            <motion.div
+              className='fixed top-4 right-4 z-50'
+              initial={{ opacity: 0, x: 100, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 100, scale: 0.9 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <div className='bg-white/95 backdrop-blur-md rounded-xl p-3 pr-10 shadow-2xl border border-red-200 max-w-xs'>
+                <div className='flex items-start gap-2'>
+                  <span className='text-red-500 text-lg flex-shrink-0 mt-0.5'>⚠️</span>
+                  <div>
+                    <h4 className='font-bold text-red-800 text-xs mb-1'>Invalid Puzzle</h4>
+                    <p className='text-red-700 text-xs leading-relaxed'>{errorMessage}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setErrorMessage('')}
+                  className='absolute top-2 right-2 text-red-500 hover:text-red-700 hover:bg-red-100 w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-200 font-bold text-xs'
+                  title='Dismiss error'
+                >
+                  ×
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </section>
   )
