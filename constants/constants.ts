@@ -65,12 +65,4 @@ export const Navlinks = [
     'name': 'dsa',
     'link': '/dsa',
   },
-  {
-    'name': 'blogs',
-    'link': '/blogs',
-  }, 
-  {
-    'name': 'projects',
-    'link': '/projects'
-  }
 ]
