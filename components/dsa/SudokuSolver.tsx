@@ -398,9 +398,13 @@ const SudokuSolver = () => {
     else if (sudoku[rowIndex][colIndex] !== '.' && isVisualizing) {
       classes += "bg-gradient-to-br from-purple-100 to-purple-200 text-purple-800 font-semibold "
     }
-    // Algorithm-filled cells when solved (green gradient) - only for non-original cells
+    // Algorithm-filled cells when solved (keep purple gradient) - only for non-original cells
     else if (sudoku[rowIndex][colIndex] !== '.' && isSolved && !isOriginalCell) {
-      classes += "bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-800 font-black "
+      classes += "bg-gradient-to-br from-purple-100 to-purple-200 text-purple-800 font-black "
+    }
+    // Algorithm-filled cells when not solving and not solved yet (purple gradient) - only for non-original cells
+    else if (sudoku[rowIndex][colIndex] !== '.' && !isVisualizing && !isOriginalCell) {
+      classes += "bg-gradient-to-br from-purple-100 to-purple-200 text-purple-800 font-semibold "
     }
     // Focus and hover states (only when editable)
     else if (isEditable) {
