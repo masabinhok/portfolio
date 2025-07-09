@@ -433,7 +433,7 @@ const SudokuSolver = () => {
   }
 
   return (
-    <section className='h-screen w-screen p-4 flex flex-col items-center justify-center overflow-hidden'>
+    <section className='min-h-screen w-screen p-4 flex flex-col items-center justify-center overflow-hidden'>
       <motion.div
         className='w-full max-w-7xl flex flex-col items-center gap-4 h-full'
         initial={{ opacity: 0, y: 20 }}
