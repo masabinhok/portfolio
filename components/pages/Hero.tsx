@@ -237,7 +237,7 @@ const Hero = () => {
                     </div>
                     <p className="text-gray-300 text-sm leading-relaxed mb-3">
                       I enjoy building scalable web applications with modern technologies.
-                      Specialized in TypeScript, React/Next.js, Node/Nest.js, and cloud architecture.
+                      Specialized in TypeScript, React/Next.js, Node/Nest.js.
                     </p>
 
                     <div className="grid grid-cols-2 gap-2 text-xs">
