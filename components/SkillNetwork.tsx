@@ -24,7 +24,20 @@ const SkillNetwork = () => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+
+    checkIfMobile()
+    window.addEventListener('resize', checkIfMobile)
+
+    return () => window.removeEventListener('resize', checkIfMobile)
+  }, [])
 
   // Define skill nodes with their positions and connections
   const skillNodes: SkillNode[] = [
@@ -159,21 +172,24 @@ const SkillNetwork = () => {
     const container = containerRef.current
     if (!container || !isInitialized) {
       // Use consistent fallback positions based on the expected container size
-      const fallbackWidth = 400
-      const fallbackHeight = 300
+      const fallbackWidth = isMobile ? 300 : 400
+      const fallbackHeight = isMobile ? 250 : 300
       return {
-        x: (node.x / 100) * (fallbackWidth - 100) + 50,
-        y: (node.y / 100) * (fallbackHeight - 100) + 50
+        x: (node.x / 100) * (fallbackWidth - 80) + 40,
+        y: (node.y / 100) * (fallbackHeight - 80) + 40
       }
     }
 
     const rect = container.getBoundingClientRect()
-    const width = rect.width > 0 ? rect.width : 400
-    const height = rect.height > 0 ? rect.height : 300
+    const width = rect.width > 0 ? rect.width : (isMobile ? 300 : 400)
+    const height = rect.height > 0 ? rect.height : (isMobile ? 250 : 300)
+
+    // Adjust margins based on screen size
+    const margin = isMobile ? 40 : 50
 
     return {
-      x: (node.x / 100) * (width - 100) + 50,
-      y: (node.y / 100) * (height - 100) + 50
+      x: (node.x / 100) * (width - margin * 2) + margin,
+      y: (node.y / 100) * (height - margin * 2) + margin
     }
   }
 
@@ -183,7 +199,9 @@ const SkillNetwork = () => {
 
     const midX = (fromPos.x + toPos.x) / 2
     const midY = (fromPos.y + toPos.y) / 2
-    const offset = 20
+
+    // Reduce offset on smaller screens
+    const offset = isMobile ? 10 : 20
 
     return `M ${fromPos.x} ${fromPos.y} Q ${midX + offset} ${midY - offset} ${toPos.x} ${toPos.y}`
   }
@@ -213,9 +231,9 @@ const SkillNetwork = () => {
   }
 
   return (
-    <section className=' w-full h-[600px] relative '>
+    <section className='w-full h-[400px] sm:h-[500px] lg:h-[600px] relative'>
       {/* Network Visualization */}
-      <div ref={containerRef} className='relative w-full h-full  p-4'>
+      <div ref={containerRef} className='relative w-full h-full p-2 sm:p-4'>
         {/* SVG for connections */}
         <svg className='absolute inset-0 w-full h-full pointer-events-none'>
           <defs>
@@ -255,6 +273,7 @@ const SkillNetwork = () => {
                   ease: "easeInOut"
                 }}
                 filter={isHighlighted ? "url(#glow)" : undefined}
+                style={{ strokeDasharray: "none" }}
               />
             )
           })}
@@ -271,12 +290,12 @@ const SkillNetwork = () => {
               className={`absolute cursor-pointer transition-all duration-300 ${isHighlighted ? 'z-20' : 'z-10'
                 }`}
               style={{
-                left: position.x - 25,
-                top: position.y - 25,
+                left: position.x - (isMobile ? 20 : 25),
+                top: position.y - (isMobile ? 20 : 25),
               }}
               initial={{ scale: 0, opacity: 0 }}
               animate={{
-                scale: isHighlighted ? 1.2 : 1,
+                scale: isHighlighted ? (isMobile ? 1.1 : 1.2) : 1,
                 opacity: isHighlighted ? 1 : 0.6
               }}
               transition={{
@@ -285,23 +304,23 @@ const SkillNetwork = () => {
                 type: "spring",
                 stiffness: 100
               }}
-              onMouseEnter={() => setHoveredNode(node.id)}
-              onMouseLeave={() => setHoveredNode(null)}
+              onMouseEnter={() => !isMobile && setHoveredNode(node.id)}
+              onMouseLeave={() => !isMobile && setHoveredNode(null)}
               onClick={() => setSelectedNode(selectedNode === node.id ? null : node.id)}
-              whileHover={{ scale: 1.3 }}
+              whileHover={{ scale: isMobile ? 1.2 : 1.3 }}
               whileTap={{ scale: 0.9 }}
             >
               <div className={`
-                w-12 h-12 rounded-full bg-gradient-to-br ${node.color} 
-                flex items-center justify-center text-white font-bold text-lg
+                w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br ${node.color} 
+                flex items-center justify-center text-white font-bold text-sm sm:text-lg
                 shadow-lg border-2 border-gray-700
                 ${isHighlighted ? 'ring-2 ring-green-400 ring-opacity-50' : ''}
               `}>
-                <span className="text-xl">{node.icon}</span>
+                <span className="text-base sm:text-xl">{node.icon}</span>
               </div>
 
               {/* Node label */}
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-300 whitespace-nowrap">
+              <div className="absolute -bottom-6 sm:-bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-300 whitespace-nowrap">
                 {node.name}
               </div>
             </motion.div>
@@ -318,7 +337,7 @@ const SkillNetwork = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="absolute top-0 left-4 right-4 bg-gray-800 border border-gray-600 rounded-lg p-3"
+            className="absolute top-0 left-2 right-2 sm:left-4 sm:right-4 bg-gray-800 border border-gray-600 rounded-lg p-2 sm:p-3 z-30"
           >
             {(() => {
               const activeNode = skillNodes.find(n => n.id === (hoveredNode || selectedNode))
@@ -327,15 +346,17 @@ const SkillNetwork = () => {
               return (
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xl">{activeNode.icon}</span>
-                    <h3 className="text-green-400 font-semibold">{activeNode.name}</h3>
-                    <span className="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">
+                    <span className="text-lg sm:text-xl">{activeNode.icon}</span>
+                    <h3 className="text-green-400 font-semibold text-sm sm:text-base">{activeNode.name}</h3>
+                    <span className="text-xs bg-gray-700 px-1 sm:px-2 py-1 rounded text-gray-300">
                       {activeNode.category}
                     </span>
                   </div>
-                  <p className="text-gray-300 text-sm">{activeNode.description}</p>
+                  <p className="text-gray-300 text-xs sm:text-sm">{activeNode.description}</p>
                   <div className="mt-2 text-xs text-gray-400">
-                    Connected to: {activeNode.connections.map(id =>
+                    <span className="hidden sm:inline">Connected to: </span>
+                    <span className="sm:hidden">Links: </span>
+                    {activeNode.connections.map(id =>
                       skillNodes.find(n => n.id === id)?.name
                     ).join(', ')}
                   </div>

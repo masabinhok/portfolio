@@ -51,15 +51,16 @@ const Projects = () => {
   }
 
   return (
-    <section className='min-h-screen pt-20 pb-10 px-4'>
+    <section className='min-h-screen pt-16 sm:pt-20 pb-10 px-4 sm:px-6 lg:px-8'>
       {/* Header */}
-      <div className='max-w-7xl mx-auto mb-16 text-center w-fit'>
-        <h1 className='lowercase text-7xl font-bold text-soft max-sm:text-5xl'>
+      <div className='max-w-7xl mx-auto mb-12 sm:mb-16 text-center'>
+        <h1 className='lowercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-soft leading-tight'>
           featured projects.
         </h1>
-        <h3 className='mt-1 text-end text-muted'>I turn <span className='italic text-white'>ideas</span> in my head into <span className='italic text-white'>code.</span></h3>
+        <h3 className='mt-2 text-right text-sm sm:text-base text-muted px-4 sm:px-0'>
+          I turn <span className='italic text-white'>ideas</span> in my head into <span className='italic text-white'>code.</span>
+        </h3>
       </div>
-
       {/* Projects Grid */}
       <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 '>
         {projects.map((project, index) => {
