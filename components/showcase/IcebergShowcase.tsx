@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // ============================================
 // ICEBERG SHOWCASE COMPONENT
@@ -259,7 +260,7 @@ const IcebergShowcase: React.FC = () => {
           {/* Layout: Image left, Copy right (stacked on mobile) */}
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
             {/* Screenshot */}
-            <div className="w-full md:w-1/2 flex-shrink-0">
+            <Link href="https://sms-nest.vercel.app" className="w-full md:w-1/2 flex-shrink-0">
               <Image
                 src="/sms-demo.png"
                 alt="SMS-Nest landing page screenshot"
@@ -269,7 +270,7 @@ const IcebergShowcase: React.FC = () => {
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-black/50"
                 style={{ maxWidth: '400px', margin: '0 auto', display: 'block' }}
               />
-            </div>
+            </Link>
 
             {/* Copy */}
             <div className="w-full md:w-1/2 text-center md:text-left">
