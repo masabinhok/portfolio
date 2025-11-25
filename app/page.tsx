@@ -1,4 +1,5 @@
 import Hero from "@/components/pages/Hero";
+import GithubShowcase from "@/components/showcase/GithubShowcase";
 import IcebergShowcase from "@/components/showcase/IcebergShowcase";
 
 
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       {/* Showcase - Storytelling !! */}
      <IcebergShowcase/>
+     <GithubShowcase/>
   
     </main>
   );
