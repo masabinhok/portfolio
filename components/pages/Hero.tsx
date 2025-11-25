@@ -1,10 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import SkillNetwork from '../SkillNetwork'
-import Terminal from '../Terminal';
+import SkillNetwork from '../ui/SkillNetwork'
+import Terminal from '../ui/Terminal';
 import { CheckCircle, Loader2, Sparkles, Zap } from 'lucide-react';
-import ExceptionalButton from '../Button';
-import MessageBox from '../MessageBox';
+import ExceptionalButton from '../ui/Button';
+import MessageBox from '../ui/MessageBox';
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 import { motion } from 'framer-motion'

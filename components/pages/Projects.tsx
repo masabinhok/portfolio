@@ -2,10 +2,10 @@
 'use client'
 import { ExternalLink, Github, Zap, Code, Palette, Database, Globe, Smartphone, Contact, Heart } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
-import ExceptionalButton from '../Button'
+import ExceptionalButton from '../ui/Button'
 import { ProjectCategory, ProjectStatus } from '@/types/types'
 import { projects } from '@/constants/constants'
-import ContactBox from '../ContactBox'
+import ContactBox from '../ui/ContactBox'
 
 const getCategoryIcon = (category: ProjectCategory) => {
   const icons: Record<ProjectCategory, typeof Code> = {
