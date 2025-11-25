@@ -67,7 +67,7 @@ const IcebergShowcase: React.FC = () => {
     if (!front || !back) return;
 
     // Expand card height for the backend view (needs more space)
-    const backHeight = 480; // Fixed height for backend view
+    const backHeight = 540; // Fixed height for backend view
     if (card) {
       gsap.to(card, { height: backHeight, duration: 0.4, ease: 'power2.inOut' });
     }
@@ -313,7 +313,7 @@ const IcebergShowcase: React.FC = () => {
         {/* ========== BACK SIDE ========== */}
         <div
           ref={backRef}
-          className="absolute inset-0 w-full rounded-2xl overflow-hidden p-4 sm:p-6"
+          className="absolute inset-0 w-full  rounded-2xl overflow-hidden p-4 sm:p-6"
           style={{
             background: 'linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #0a0a0a 100%)',
             boxShadow: '0 25px 80px -12px rgba(0, 0, 0, 0.6)',
@@ -347,9 +347,9 @@ const IcebergShowcase: React.FC = () => {
           </div>
 
           {/* Current Event Display */}
-          <div className="text-center mb-2 h-6">
+          <div className="text-center mb-2 h-6 ml-6">
             {getCurrentEvent() && (
-              <span className="inline-block text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded font-mono text-xs sm:text-sm animate-pulse">
+              <span className="inline-block text-yellow-400 px-3 py-1 rounded font-mono text-xs sm:text-xs animate-pulse">
                 {getCurrentEvent()}
               </span>
             )}
@@ -439,9 +439,9 @@ const IcebergShowcase: React.FC = () => {
                     <line x1="12" y1="9.5" x2="18" y2="14.5" strokeWidth="1.5"/>
                     <line x1="8.5" y1="17" x2="15.5" y2="17" strokeWidth="1.5"/>
                   </svg>
-                  {getNodeState('kafka') === 'active' && (
-                    <div className="absolute inset-0 rounded-2xl animate-pulse opacity-40" style={{ border: `2px solid ${getNodeColor('active')}` }} />
-                  )}
+                    {/* {getNodeState('kafka') === 'active' && (
+                      <div className="absolute inset-0 rounded-2xl animate-pulse opacity-40" style={{ border: `2px solid ${getNodeColor('active')}` }} />
+                    )} */}
                 </div>
                 <span className="text-gray-300 text-xs sm:text-sm mt-1.5 font-semibold">Kafka</span>
               </div>
@@ -500,14 +500,16 @@ const IcebergShowcase: React.FC = () => {
                     </marker>
                   </defs>
                   {/* Line going down from Kafka to Email */}
-                  <path d="M50 0 L50 52" stroke={step >= 5 ? '#22c55e' : '#3b82f6'} strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrow3)" fill="none" opacity="0.7">
+                  <path d="M60 0 L60 52" stroke={step >= 5 ? '#22c55e' : '#3b82f6'} strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrow3)" fill="none" opacity="0.7">
                     <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="0.8s" repeatCount="indefinite"/>
                   </path>
                 </svg>
                 {step === 4 && (
-                  <span className="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] sm:text-[10px] text-green-400 font-mono whitespace-nowrap">
-                    user.created
-                  </span>
+               <span className="absolute -top-4 left-1/2 -translate-x-[40%] text-[8px] sm:text-[10px] text-green-400 font-mono whitespace-nowrap">
+  user.created
+</span>
+
+
                 )}
                 {/* Traveling dot 2 for user.created (Auth → Kafka) */}
                 <div 
@@ -519,7 +521,7 @@ const IcebergShowcase: React.FC = () => {
                     borderRadius: '50%',
                     background: 'radial-gradient(circle, #22c55e 0%, #16a34a 100%)',
                     boxShadow: '0 0 12px #22c55e, 0 0 24px #16a34a',
-                    right: '45px',
+                    right: '33px',
                     top: '0',
                     opacity: 0,
                   }}
@@ -531,7 +533,7 @@ const IcebergShowcase: React.FC = () => {
             </div>
 
             {/* Email Service at bottom center */}
-            <div className="relative flex flex-col items-center -mt-2">
+            <div className="relative flex flex-col items-center mt-2 ml-6">
               <div 
                 className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center transition-all duration-300"
                 style={{ 
@@ -561,7 +563,7 @@ const IcebergShowcase: React.FC = () => {
           </div>
 
           {/* Status Message */}
-          <div className="text-center mt-4">
+          <div className="text-center mt-4 ml-6">
             <p 
               className="text-xs sm:text-sm font-medium transition-all duration-300"
               style={{ 
@@ -572,26 +574,14 @@ const IcebergShowcase: React.FC = () => {
             </p>
             {step === 6 && (
               <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
-                Welcome email sent with login credentials ✉️
+                Welcome email sent with login credentials 
               </p>
             )}
           </div>
 
-          {/* Legend */}
-          <div className="flex justify-center gap-4 sm:gap-6 mt-3 text-[9px] sm:text-[10px] text-gray-500">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-yellow-500" />
-              <span>Processing</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span>Complete</span>
-            </div>
-          </div>
-
           {/* Replay button */}
           {step === 6 && (
-            <div className="text-center mt-2">
+            <div className="text-center mt-2 ml-6">
               <button
                 onClick={() => {
                   const dot1 = dot1Ref.current;
