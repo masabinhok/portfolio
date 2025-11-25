@@ -3,6 +3,7 @@ import CliShowcase from "@/components/showcase/CliShowcase";
 import GithubShowcase from "@/components/showcase/GithubShowcase";
 import IcebergShowcase from "@/components/showcase/IcebergShowcase";
 import ProblemsShowcase from "@/components/showcase/ProblemsShowcase";
+import Collaborate from "@/components/pages/Collaborate";
 
 
 export default function Home() {
@@ -14,7 +15,8 @@ export default function Home() {
      <GithubShowcase/>
      <CliShowcase/>
      <ProblemsShowcase/>
-  
+     <Collaborate/>
+        
     </main>
   );
 }
