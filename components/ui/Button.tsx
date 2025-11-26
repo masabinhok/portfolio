@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ButtonHTMLAttributes } from 'react';
 
-
 interface Particle {
   id: number;
   x: number;
@@ -40,10 +39,20 @@ const ExceptionalButton = ({
   const [isPressed, setIsPressed] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [ripples, setRipples] = useState<Ripple[]>([]);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Generate floating particles on hover
   useEffect(() => {
-    if (isHovering && !disabled) {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
+  // Generate floating particles on hover - ONLY if motion is not reduced
+  useEffect(() => {
+    if (isHovering && !disabled && !prefersReducedMotion) {
       const interval = setInterval(() => {
         const newParticle: Particle = {
           id: Math.random(),
@@ -55,23 +64,27 @@ const ExceptionalButton = ({
         setParticles(prev => [...prev.slice(-6), newParticle]);
       }, 300);
       return () => clearInterval(interval);
+    } else {
+      setParticles([]); // Clear particles if not hovering or reduced motion
     }
-  }, [isHovering, disabled]);
+  }, [isHovering, disabled, prefersReducedMotion]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
 
-    // Create ripple effect
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    // Create ripple effect - ONLY if motion is not reduced
+    if (!prefersReducedMotion) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    const newRipple: Ripple = { id: Math.random(), x, y };
-    setRipples(prev => [...prev, newRipple]);
+      const newRipple: Ripple = { id: Math.random(), x, y };
+      setRipples(prev => [...prev, newRipple]);
 
-    setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== newRipple.id));
-    }, 600);
+      setTimeout(() => {
+        setRipples(prev => prev.filter(r => r.id !== newRipple.id));
+      }, 600);
+    }
 
     setIsPressed(true);
     setTimeout(() => setIsPressed(false), 150);
@@ -128,6 +141,7 @@ const ExceptionalButton = ({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       disabled={disabled}
+      aria-disabled={disabled}
       className={`
         relative overflow-hidden font-semibold rounded-xl cursor-pointer
         transition-all duration-300 transform-gpu w-full
@@ -135,22 +149,24 @@ const ExceptionalButton = ({
         ${currentVariant.base}
         ${disabled
           ? 'opacity-50 cursor-not-allowed'
-          : `text-white hover:scale-105 active:scale-95 ${isHovering ? `shadow-2xl ${currentVariant.shadow}` : 'shadow-lg'
+          : `text-white hover:scale-105 active:scale-95 ${isHovering && !prefersReducedMotion ? `shadow-2xl ${currentVariant.shadow}` : 'shadow-lg'
           }`
         }
-        ${isPressed ? 'scale-95' : ''}
+        ${isPressed && !prefersReducedMotion ? 'scale-95' : ''}
         ${className}
       `}
       style={{
-        boxShadow: isHovering && !disabled
+        boxShadow: isHovering && !disabled && !prefersReducedMotion
           ? `0 0 40px ${currentVariant.glow}, 0 0 80px ${currentVariant.glow}20`
           : undefined
       }}
       {...props}
     >
-      {/* Animated background overlay */}
-      <div className={`absolute inset-0 bg-gradient-to-r ${currentVariant.hover} transition-opacity duration-300 ${isHovering && !disabled ? 'opacity-100' : 'opacity-0'
-        }`}></div>
+      {/* Animated background overlay - Disabled on reduced motion */}
+      {!prefersReducedMotion && (
+        <div className={`absolute inset-0 bg-gradient-to-r ${currentVariant.hover} transition-opacity duration-300 ${isHovering && !disabled ? 'opacity-100' : 'opacity-0'
+          }`}></div>
+      )}
 
       {/* Ripple effects */}
       {ripples.map(ripple => (
@@ -188,9 +204,11 @@ const ExceptionalButton = ({
         </div>
       ))}
 
-      {/* Sliding highlight */}
-      <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 transform skew-x-12 transition-transform duration-700 ${isHovering && !disabled ? 'translate-x-full' : '-translate-x-full'
-        }`}></div>
+      {/* Sliding highlight - Disabled on reduced motion */}
+      {!prefersReducedMotion && (
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 transform skew-x-12 transition-transform duration-700 ${isHovering && !disabled ? 'translate-x-full' : '-translate-x-full'
+          }`}></div>
+      )}
 
       {/* Border glow */}
       <div className={`absolute inset-0 rounded-xl border transition-opacity duration-300 ${isHovering && !disabled ? 'opacity-60 border-white' : 'opacity-0 border-transparent'
