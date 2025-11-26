@@ -8,52 +8,36 @@ const ProblemsShowcase: React.FC = () => {
   return (
     <section className="w-full py-16">
       {/* Section header */}
-      <div className="mb-8  text-right ">
-        <h2 className="text-2xl sm:text-3xl font-bold text-heading mb-2 ">
-          I solve problems: <span className="text-blue-400">I can solve yours too </span>
+      <div className="mb-12 text-right">
+        <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-3">
+          I solve problems: <span className="gradient-text">I can solve yours too</span>
         </h2>
-        <p className="text-muted text-sm sm:text-base">
+        <p className="text-muted text-base sm:text-lg">
           I&apos;ve been building solutions for myself, and for the people around me.
         </p>
       </div>
 
-      {/* Flip Card Container */}
-      <div
-        className="relative w-full max-w-4xl mx-auto overflow-hidden ml-10 max-sm:ml-0"
-        style={{ perspective: '1200px', transition: 'height 0.4s ease' }}
-      >
-        <div
-          className="relative w-full rounded-2xl overflow-hidden p-6 sm:p-8 md:p-10"
-          style={{
-            background: 'linear-gradient(145deg, #0a0a0a 0%, #111827 50%, #0f172a 100%)',
-            boxShadow: '0 25px 80px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.06)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            backfaceVisibility: 'hidden',
-            transformStyle: 'preserve-3d',
-          }}
-        >
+      {/* First Card - e4.learnchess */}
+      <div className="relative w-full max-w-4xl mx-auto mb-8 ml-10 max-sm:ml-0">
+        <div className="premium-card p-8 sm:p-10 md:p-12 group">
           {/* Layout: Image right, Copy left (stacked on mobile) */}
-          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
             {/* Copy */}
             <div className="w-full md:w-1/2 text-center md:text-left">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-1 leading-tight">
-                I built e4.learnchess, because: why would i pay them ?
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight">
+                I built e4.learnchess, because: <span className="text-green-400">why would i pay them?</span>
               </h3>
-              <p className="text-muted text-xs sm:text-sm mb-4">
-                you can practice, learn, quiz: openings! upload PGNs, record lines within my app.
+              <p className="text-muted text-sm sm:text-base mb-6 leading-relaxed">
+                You can practice, learn, quiz openings! Upload PGNs, record lines within my app. A complete chess opening trainer built from scratch.
               </p>
 
               {/* Buttons */}
-              <div className="flex flex-col items-center sm:flex-row gap-3 justify-center md:justify-start">
+              <div className="flex flex-col items-center sm:flex-row gap-4 justify-center md:justify-start">
                 <Link
                   href="https://github.com/masabinhok/e4/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.25)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm gradient-primary glow-effect smooth-transition hover:scale-105 active:scale-95"
                 >
                   Github
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -64,100 +48,85 @@ const ProblemsShowcase: React.FC = () => {
                   href="https://e4-learnchess.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.25)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm gradient-secondary glow-effect smooth-transition hover:scale-105 active:scale-95"
                 >
                   Visit Live Site
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </Link>
-
-
               </div>
             </div>
+
             {/* Screenshot */}
-            <Link href="https://e4-learnchess.vercel.app/" className="w-full md:w-1/2 flex-shrink-0">
-              <Image
-                src="/e4-demo.png"
-                alt="e4.learnchess screenshot"
-                width={800}
-                height={450}
-                loading="lazy"
-                className="w-full h-auto rounded-2xl shadow-2xl shadow-black/50"
-                style={{ maxWidth: '400px', margin: '0 auto', display: 'block' }}
-              />
-            </Link>
-
-
-          </div>
-
-          {/* Decorative glow */}
-          <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-        </div>
-
-
-      </div>
-
-      <div
-        className="relative w-full max-w-4xl mx-auto overflow-hidden mt-5 mr-10 max-sm:mr-0"
-        style={{ perspective: '1200px', transition: 'height 0.4s ease' }}
-      >
-
-        <div
-          className="relative w-full rounded-2xl overflow-hidden p-6 sm:p-8 md:p-10"
-          style={{
-            background: 'linear-gradient(145deg, #0a0a0a 0%, #111827 50%, #0f172a 100%)',
-            boxShadow: '0 25px 80px -12px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.06)',
-            border: '1px solid rgba(255,255,255,0.05)',
-            backfaceVisibility: 'hidden',
-            transformStyle: 'preserve-3d',
-          }}
-        >
-
-          {/* Layout: Image right, Copy left (stacked on mobile) */}
-          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
-            {/* Screenshot */}
-            <div className="w-full md:w-1/2 flex-shrink-0">
-              {/* Screenshot */}
-              <Link href="https://spellsan.vercel.app/" className="w-full md:w-1/2 flex-shrink-0">
+            <Link href="https://e4-learnchess.vercel.app/" className="w-full md:w-1/2 flex-shrink-0 group/image">
+              <div className="relative overflow-hidden rounded-2xl smooth-transition group-hover/image:scale-105">
                 <Image
-                  src="/spellsan-demo.png"
-                  alt="spellsan screenshot"
+                  src="/e4-demo.png"
+                  alt="e4.learnchess screenshot"
                   width={800}
                   height={450}
                   loading="lazy"
-                  className="w-full h-auto rounded-2xl shadow-2xl shadow-black/50"
+                  className="w-full h-auto shadow-2xl"
                   style={{ maxWidth: '400px', margin: '0 auto', display: 'block' }}
                 />
-              </Link>
+                <div className="absolute inset-0 bg-gradient-to-t from-green-500/20 to-transparent opacity-0 group-hover/image:opacity-100 smooth-transition" />
+              </div>
+            </Link>
+          </div>
 
+          {/* Decorative glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-green-500/10 rounded-full blur-3xl pointer-events-none opacity-0 group-hover:opacity-100 smooth-transition" />
+        </div>
+      </div>
+
+      {/* Second Card - Spellsan */}
+      <div className="relative w-full max-w-4xl mx-auto mr-10 max-sm:mr-0">
+        <div className="premium-card p-8 sm:p-10 md:p-12 group">
+          {/* Layout: Image left, Copy right (stacked on mobile) */}
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+            {/* Screenshot */}
+            <div className="w-full md:w-1/2 flex-shrink-0 group/image">
+              <Link href="https://spellsan.vercel.app/" className="block">
+                <div className="relative overflow-hidden rounded-2xl smooth-transition group-hover/image:scale-105">
+                  <Image
+                    src="/spellsan-demo.png"
+                    alt="spellsan screenshot"
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                    className="w-full h-auto shadow-2xl"
+                    style={{ maxWidth: '400px', margin: '0 auto', display: 'block' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-amber-500/20 to-transparent opacity-0 group-hover/image:opacity-100 smooth-transition" />
+                </div>
+              </Link>
             </div>
 
             {/* Copy */}
             <div className="w-full md:w-1/2 text-center md:text-left">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">
-                Sissy had to prep for a spelling competition !
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight">
+                Sissy had to prep for a spelling competition!
               </h3>
-              <p className="text-muted text-xs sm:text-sm mb-4">
-                So, i vibe coded a spelling practice app within hours, with prototype model SDLC.
+              <p className="text-muted text-sm sm:text-base mb-4 leading-relaxed">
+                So, I vibe coded a spelling practice app within hours, with prototype model SDLC.
               </p>
-              <p className='text-xs mb-4 text-amber-400'>Yeah, I vibecode: Claude helps me get things done fast.
-              </p>
+              <div className='flex items-center gap-2 mb-6 justify-center md:justify-start'>
+                <svg className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <p className='text-sm font-medium text-amber-400'>
+                  Yeah, I vibecode: Claude helps me get things done fast.
+                </p>
+              </div>
+
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 <Link
                   href="https://github.com/masabinhok/spellsan/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.25)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm gradient-primary glow-effect smooth-transition hover:scale-105 active:scale-95"
                 >
                   Github
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -169,29 +138,20 @@ const ProblemsShowcase: React.FC = () => {
                   href="https://spellsan.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.25)',
-                  }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm gradient-secondary glow-effect smooth-transition hover:scale-105 active:scale-95"
                 >
                   Visit Live Site
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </Link>
-
               </div>
             </div>
-
-
           </div>
 
           {/* Decorative glow */}
-          <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none opacity-0 group-hover:opacity-100 smooth-transition" />
         </div>
-
-
       </div>
     </section>
   );

@@ -90,11 +90,11 @@ const IcebergShowcase: React.FC = () => {
     return (
         <section className="w-full py-16">
             {/* Section header */}
-            <div className="mb-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-heading mb-2">
-                    Featured Project: <span className="text-blue-400">School Management System</span>
+            <div className="mb-12">
+                <h2 className="text-3xl sm:text-4xl font-bold text-heading mb-3">
+                    Featured Project: <span className="gradient-text">School Management System</span>
                 </h2>
-                <p className="text-muted text-sm sm:text-base">
+                <p className="text-muted text-base sm:text-lg">
                     A school management system with event-driven architecture
                 </p>
             </div>
