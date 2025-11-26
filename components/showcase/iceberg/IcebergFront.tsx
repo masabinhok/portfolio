@@ -41,7 +41,7 @@ const IcebergFront = forwardRef<HTMLDivElement, IcebergFrontProps>(({ onExploreB
                     </h3>
                     {/* Buttons */}
                     <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                        <a
+                        <Link
                             href="https://sms-nest.vercel.app"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -55,7 +55,7 @@ const IcebergFront = forwardRef<HTMLDivElement, IcebergFrontProps>(({ onExploreB
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
-                        </a>
+                        </Link>
                         <button
                             onClick={onExploreBackend}
                             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-white text-sm border border-gray-600 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200"
