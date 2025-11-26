@@ -22,9 +22,13 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
+                    // Trigger animation when entering viewport
                     setTimeout(() => {
                         setIsVisible(true)
                     }, delay)
+                } else {
+                    // Reset animation when leaving viewport
+                    setIsVisible(false)
                 }
             },
             {
@@ -45,7 +49,8 @@ const SectionWrapper: React.FC<SectionWrapperProps> = ({
     }, [delay])
 
     const getAnimationClass = () => {
-        if (animation === 'none' || !isVisible) return 'opacity-0'
+        if (animation === 'none') return ''
+        if (!isVisible) return 'opacity-0'
 
         const animations = {
             'fade-up': 'animate-fade-in-up',
