@@ -8,7 +8,7 @@ import MessageBox from '../ui/MessageBox';
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 import { motion } from 'framer-motion'
-import sabin from '@/public/sabin.jpg'
+import sabin from '@/public/sabin.png'
 import Image from 'next/image';
 import Link from 'next/link';
 

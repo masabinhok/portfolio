@@ -78,12 +78,9 @@ const Footer = () => {
 
                 {/* Bottom Bar */}
                 <div className="pt-8 border-t border-white/5">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted">
                         <p className="flex items-center gap-1">
                             © {currentYear} Sabin Shrestha. Built with <Heart size={14} className="text-red-400 animate-pulse" style={{ animationDuration: '2s' }} /> and Next.js
-                        </p>
-                        <p className="text-xs">
-                            Designed for <span className="text-green-400">Lighthouse 90+</span> • Zero WebGL
                         </p>
                     </div>
                 </div>
