@@ -5,10 +5,10 @@ import React from 'react'
 const AnimatedBackground = () => {
     return (
         <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-            {/* Gradient Orbs */}
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-            <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
+            {/* Winter Gradient Orbs */}
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#b3e0ff]/20 rounded-full blur-3xl animate-float" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#5ac8fa]/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+            <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-[#e0f7fa]/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
 
             {/* SVG Pattern Overlay */}
             <svg
@@ -50,14 +50,14 @@ const AnimatedBackground = () => {
 
                     {/* Gradient Definitions */}
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
-                        <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.1" />
-                        <stop offset="100%" stopColor="#ec4899" stopOpacity="0.1" />
+                        <stop offset="0%" stopColor="#b3e0ff" stopOpacity="0.18" />
+                        <stop offset="50%" stopColor="#5ac8fa" stopOpacity="0.13" />
+                        <stop offset="100%" stopColor="#e0f7fa" stopOpacity="0.12" />
                     </linearGradient>
 
                     <radialGradient id="radial1" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#b3e0ff" stopOpacity="0.22" />
+                        <stop offset="100%" stopColor="#5ac8fa" stopOpacity="0" />
                     </radialGradient>
                 </defs>
 

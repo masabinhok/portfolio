@@ -3,6 +3,7 @@ import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import Snowfall from "@/components/ui/Snowfall";
 import Footer from "@/components/ui/Footer";
 
 const quickSand = Quicksand({
@@ -32,9 +33,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quickSand.variable} antialiased w-full min-h-screen flex flex-col items-center overflow-x-hidden`}
+        className={`${quickSand.variable} winter-theme antialiased w-full min-h-screen flex flex-col items-center overflow-x-hidden`}
       >
+        <Snowfall />
         <AnimatedBackground />
+        
         <Navbar />
         {children}
         <Footer />

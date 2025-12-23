@@ -1,3 +1,44 @@
+:root.winter-theme {
+  --background: #e6f2fb;
+  --foreground: #183153;
+  --muted: #7da0c4;
+  --soft: #b3d0e6;
+  --default: #183153;
+  --heading: #0a2540;
+  --accent-primary: #5ac8fa;
+  --accent-secondary: #b3e0ff;
+  --accent-tertiary: #e0f7fa;
+  --accent-success: #7ee8fa;
+  --accent-warning: #f9fafb;
+  --gradient-start: #b3e0ff;
+  --gradient-mid: #5ac8fa;
+  --gradient-end: #e0f7fa;
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(90, 200, 250, 0.18);
+  --shadow-sm: 0 2px 8px rgba(90, 200, 250, 0.08);
+  --shadow-md: 0 8px 24px rgba(90, 200, 250, 0.15);
+  --shadow-lg: 0 16px 48px rgba(90, 200, 250, 0.22);
+  --shadow-glow: 0 0 40px rgba(90, 200, 250, 0.18);
+}
+
+/* Frosty glass effect for winter theme */
+.winter-theme .glass, .winter-theme .premium-card {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(18px) brightness(1.08) !important;
+  -webkit-backdrop-filter: blur(18px) brightness(1.08) !important;
+  border: 1.5px solid var(--glass-border) !important;
+  box-shadow: 0 8px 32px 0 rgba(90, 200, 250, 0.18) !important;
+}
+
+/* Add a subtle snowflake shimmer to headings in winter theme */
+.winter-theme h1, .winter-theme h2, .winter-theme h3 {
+  background: linear-gradient(90deg, #b3e0ff 0%, #e0f7fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px #b3e0ff88);
+}
 @import "tailwindcss";
 
 /* ============================================

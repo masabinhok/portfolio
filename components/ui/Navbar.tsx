@@ -62,13 +62,20 @@ const Navbar = () => {
     )
   }
 
-  return (
-    <motion.section
+  return (<> 
+    {/* Winter tag */}
+      <div className="mb-2 justify-center fixed bottom-2 right-6 z-100 transition-all duration-300 hidden lg:block">
+        <span className="px-3 py-1 rounded-full bg-[#b3e0ff]/80 text-[#183153] text-xs font-semibold shadow winter-theme-glow border border-[#5ac8fa]/40 select-none" style={{backdropFilter:'blur(6px)'}}>
+          ❄️ It&apos;s winter!
+        </span>
+      </div>
+  <motion.section
       className="fixed top-6 left-6 z-50 transition-all duration-300 hidden lg:block"
       initial={false}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
+      
       <motion.nav
         className={`flex flex-col gap-2 p-3 rounded-xl backdrop-blur-sm transition-all duration-300 ${scrolled
           ? 'bg-gray-900/60 border border-gray-700/30'
@@ -116,6 +123,8 @@ const Navbar = () => {
         })}
       </motion.nav>
     </motion.section>
+  </>
+   
   )
 }
 
