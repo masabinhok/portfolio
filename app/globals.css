@@ -633,3 +633,91 @@ section {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ============================================
+   TABLE OF CONTENTS SIDEBAR STYLES
+   NestJS Docs-inspired design
+   ============================================ */
+
+/* Thin scrollbar for ToC sidebar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Prose container for better content width control */
+.prose-container {
+  /* Inherits prose styles but allows for layout flexibility */
+}
+
+.prose-container .prose {
+  max-width: none;
+}
+
+/* ToC active item animation */
+@keyframes tocPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Mobile drawer backdrop blur */
+.toc-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth heading scroll offset */
+[id] {
+  scroll-margin-top: 100px;
+}
+
+/* Blog article reading width optimization */
+@media (min-width: 1280px) {
+  .prose-container {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+}
+
+/* ToC hover state enhancement */
+.toc-item-hover {
+  position: relative;
+}
+
+.toc-item-hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 0;
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 1px;
+  transition: height 0.2s ease;
+}
+
+.toc-item-hover:hover::before {
+  height: 100%;
+}
