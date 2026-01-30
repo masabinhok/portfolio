@@ -46,7 +46,7 @@ const Navbar = () => {
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
     return (
-      <section className="fixed opacity-0 top-6 left-6 z-50 transition-all duration-300 hidden lg:block">
+      <section className="fixed opacity-0 top-6 left-6 z-100 transition-all duration-300 hidden lg:block">
         <nav className="flex flex-col gap-2 p-3 rounded-xl backdrop-blur-sm transition-all duration-300 bg-gray-900/20 border border-gray-700/20">
           {Navlinks.map((nav, idx) => (
             <Link key={idx} href={nav.link}>

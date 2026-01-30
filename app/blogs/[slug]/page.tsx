@@ -10,7 +10,7 @@ import TableOfContentsSidebar from '@/components/blog/TableOfContentsSidebar'
 import AuthorBio from '@/components/blog/AuthorBio'
 import ShareButtons from '@/components/blog/ShareButtons'
 import RelatedPosts from '@/components/blog/RelatedPosts'
-import ReadingProgressBar from '@/components/blog/ReadingProgressBar'
+import StickyBlogNavbar from '@/components/blog/StickyBlogNavbar'
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>
@@ -73,8 +73,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <>
-      {/* Reading Progress Bar */}
-      <ReadingProgressBar />
+      {/* Sticky Blog Navbar - appears when scrolling past the header */}
+      <StickyBlogNavbar 
+        title={post.title} 
+        author={post.author} 
+        postUrl={postUrl} 
+      />
 
       <main className="w-full min-h-screen pt-24 pb-16">
         {/* 
