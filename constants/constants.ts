@@ -62,6 +62,10 @@ export const Navlinks = [
     link: '/'
   },
   {
+    name: 'blogs',
+    link: '/blogs',
+  },
+  {
     'name': 'dsa',
     'link': '/dsa',
   },

@@ -1,0 +1,438 @@
+---
+title: "Building Scalable REST APIs with NestJS and PostgreSQL"
+summary: "A comprehensive guide to architecting production-ready REST APIs using NestJS, Prisma ORM, and PostgreSQL. Learn best practices for validation, error handling, and database design."
+publishedAt: "2026-01-15"
+author:
+  name: "Sabin Shrestha"
+  role: "Full-Stack Developer"
+  avatar: "/avatar.jpg"
+  bio: "Full-Stack Developer passionate about building scalable backend systems and clean APIs. I focus on TypeScript, NestJS, and PostgreSQL."
+  social:
+    github: "https://github.com/masabinhok"
+    linkedin: "https://linkedin.com/in/sabinshresthaa"
+tags:
+  - "Backend"
+  - "NestJS"
+  - "PostgreSQL"
+  - "TypeScript"
+  - "Architecture"
+coverImage: "/blog/nestjs-api.jpg"
+featured: true
+---
+
+Building a production-ready REST API requires careful consideration of architecture, validation, error handling, and database design. In this guide, we'll walk through creating a scalable API using NestJS, one of the most powerful Node.js frameworks available.
+
+## Why NestJS?
+
+NestJS provides a robust architecture out of the box, combining elements of Object-Oriented Programming, Functional Programming, and Reactive Programming. Its modular structure makes it ideal for large-scale applications.
+
+Key benefits include:
+
+- **Dependency Injection** - Built-in IoC container for loose coupling
+- **Modular Architecture** - Easy to organize and scale
+- **TypeScript First** - Full TypeScript support with decorators
+- **Extensive Ecosystem** - Rich integration with various libraries
+
+## Setting Up the Project
+
+Let's start by creating a new NestJS project with the necessary dependencies:
+
+```bash
+# Create new NestJS project
+npx @nestjs/cli new api-project
+
+# Navigate to project
+cd api-project
+
+# Install Prisma and PostgreSQL client
+npm install prisma @prisma/client
+npm install class-validator class-transformer
+
+# Initialize Prisma
+npx prisma init
+```
+
+## Database Schema Design
+
+A well-designed database schema is crucial for performance. Here's an example schema for a blog platform:
+
+```prisma
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  tags      Tag[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@index([published])
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+```
+
+## Creating the Module Structure
+
+NestJS encourages modular design. Let's create a Posts module:
+
+```typescript
+// src/posts/posts.module.ts
+import { Module } from '@nestjs/common';
+import { PostsController } from './posts.controller';
+import { PostsService } from './posts.service';
+import { PrismaModule } from '../prisma/prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [PostsController],
+  providers: [PostsService],
+  exports: [PostsService],
+})
+export class PostsModule {}
+```
+
+## Implementing the Service Layer
+
+The service layer contains business logic and database operations:
+
+```typescript
+// src/posts/posts.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreatePostDto, UpdatePostDto } from './dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+
+@Injectable()
+export class PostsService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(userId: string, dto: CreatePostDto) {
+    return this.prisma.post.create({
+      data: {
+        ...dto,
+        authorId: userId,
+        tags: {
+          connectOrCreate: dto.tags?.map((tag) => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
+        },
+      },
+      include: {
+        author: { select: { id: true, name: true, email: true } },
+        tags: true,
+      },
+    });
+  }
+
+  async findAll(pagination: PaginationDto) {
+    const { page = 1, limit = 10 } = pagination;
+    const skip = (page - 1) * limit;
+
+    const [posts, total] = await Promise.all([
+      this.prisma.post.findMany({
+        where: { published: true },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          author: { select: { id: true, name: true } },
+          tags: true,
+        },
+      }),
+      this.prisma.post.count({ where: { published: true } }),
+    ]);
+
+    return {
+      data: posts,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async findOne(id: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: { select: { id: true, name: true, email: true } },
+        tags: true,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
+    }
+
+    return post;
+  }
+
+  async update(id: string, userId: string, dto: UpdatePostDto) {
+    await this.verifyOwnership(id, userId);
+
+    return this.prisma.post.update({
+      where: { id },
+      data: {
+        ...dto,
+        tags: dto.tags
+          ? {
+              set: [],
+              connectOrCreate: dto.tags.map((tag) => ({
+                where: { name: tag },
+                create: { name: tag },
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        author: { select: { id: true, name: true } },
+        tags: true,
+      },
+    });
+  }
+
+  async remove(id: string, userId: string) {
+    await this.verifyOwnership(id, userId);
+    return this.prisma.post.delete({ where: { id } });
+  }
+
+  private async verifyOwnership(postId: string, userId: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${postId} not found`);
+    }
+
+    if (post.authorId !== userId) {
+      throw new ForbiddenException('You can only modify your own posts');
+    }
+  }
+}
+```
+
+## Request Validation with DTOs
+
+DTOs ensure incoming data is properly validated:
+
+```typescript
+// src/posts/dto/create-post.dto.ts
+import { IsString, IsBoolean, IsOptional, IsArray, MinLength, MaxLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+
+export class CreatePostDto {
+  @IsString()
+  @MinLength(5, { message: 'Title must be at least 5 characters' })
+  @MaxLength(100, { message: 'Title cannot exceed 100 characters' })
+  title: string;
+
+  @IsString()
+  @MinLength(50, { message: 'Content must be at least 50 characters' })
+  content: string;
+
+  @IsBoolean()
+  @IsOptional()
+  published?: boolean;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  @Transform(({ value }) => 
+    Array.isArray(value) ? value.map((v: string) => v.toLowerCase().trim()) : value
+  )
+  tags?: string[];
+}
+```
+
+## Global Exception Handling
+
+Create a global exception filter for consistent error responses:
+
+```typescript
+// src/common/filters/http-exception.filter.ts
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+
+@Catch()
+export class GlobalExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
+
+  catch(exception: unknown, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Internal server error';
+    let errors: string[] | undefined;
+
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const exceptionResponse = exception.getResponse();
+      
+      if (typeof exceptionResponse === 'object') {
+        message = (exceptionResponse as any).message || exception.message;
+        errors = Array.isArray(message) ? message : undefined;
+        message = Array.isArray(message) ? 'Validation failed' : message;
+      } else {
+        message = exceptionResponse as string;
+      }
+    }
+
+    // Log the error
+    this.logger.error(
+      `${request.method} ${request.url} - ${status}: ${message}`,
+      exception instanceof Error ? exception.stack : undefined
+    );
+
+    response.status(status).json({
+      success: false,
+      statusCode: status,
+      message,
+      errors,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    });
+  }
+}
+```
+
+## Performance Optimizations
+
+### Database Indexing
+
+Always index frequently queried columns. In Prisma, use the `@@index` directive:
+
+```prisma
+model Post {
+  // ... fields
+  
+  @@index([authorId])
+  @@index([published, createdAt])
+  @@index([title]) // For search functionality
+}
+```
+
+### Response Compression
+
+Enable compression for faster response times:
+
+```typescript
+// main.ts
+import * as compression from 'compression';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  
+  app.use(compression());
+  
+  await app.listen(3000);
+}
+```
+
+### Caching with Redis
+
+Implement caching for frequently accessed data:
+
+```typescript
+// src/posts/posts.service.ts
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+
+@Injectable()
+export class PostsService {
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
+
+  async findOne(id: string) {
+    const cacheKey = `post:${id}`;
+    
+    // Check cache first
+    const cached = await this.cacheManager.get(cacheKey);
+    if (cached) return cached;
+
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: { author: true, tags: true },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post not found`);
+    }
+
+    // Cache for 5 minutes
+    await this.cacheManager.set(cacheKey, post, 300000);
+
+    return post;
+  }
+}
+```
+
+## Conclusion
+
+Building scalable REST APIs with NestJS requires attention to:
+
+1. **Proper module organization** - Keep concerns separated
+2. **Strong validation** - Never trust incoming data
+3. **Consistent error handling** - Provide clear error messages
+4. **Database optimization** - Use indexes and efficient queries
+5. **Caching strategies** - Reduce database load
+
+NestJS provides the tools and patterns needed to build enterprise-grade applications. Combined with PostgreSQL and Prisma, you have a powerful stack for any backend project.
+
+## Next Steps
+
+- Add authentication with Passport.js
+- Implement rate limiting
+- Set up logging with Winston
+- Add API documentation with Swagger

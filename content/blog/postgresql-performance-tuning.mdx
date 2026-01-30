@@ -1,0 +1,393 @@
+---
+title: "PostgreSQL Performance Tuning: From Slow Queries to Sub-Second Responses"
+summary: "Deep dive into PostgreSQL optimization techniques. Learn about indexing strategies, query analysis with EXPLAIN, connection pooling, and configuration tuning for high-traffic applications."
+publishedAt: "2025-12-28"
+author:
+  name: "Sabin Shrestha"
+  role: "Full-Stack Developer"
+  avatar: "/avatar.jpg"
+  bio: "Full-Stack Developer passionate about building scalable backend systems and clean APIs. I focus on TypeScript, NestJS, and PostgreSQL."
+  social:
+    github: "https://github.com/masabinhok"
+    linkedin: "https://linkedin.com/in/sabinshresthaa"
+tags:
+  - "PostgreSQL"
+  - "Database"
+  - "Backend"
+  - "Performance"
+coverImage: "/blog/postgresql-tuning.jpg"
+featured: false
+---
+
+A well-tuned PostgreSQL database can handle millions of queries per second. A poorly configured one struggles with hundreds. Let's explore how to optimize PostgreSQL for production workloads.
+
+## Understanding Query Execution
+
+Before optimizing, you need to understand how PostgreSQL executes queries. The `EXPLAIN ANALYZE` command is your best friend:
+
+```sql
+EXPLAIN ANALYZE
+SELECT u.name, COUNT(p.id) as post_count
+FROM users u
+LEFT JOIN posts p ON p.author_id = u.id
+WHERE u.created_at > '2025-01-01'
+GROUP BY u.id
+ORDER BY post_count DESC
+LIMIT 10;
+```
+
+Output breakdown:
+
+```
+Limit  (cost=1234.56..1234.78 rows=10 width=40) (actual time=45.123..45.156 rows=10 loops=1)
+  ->  Sort  (cost=1234.56..1250.00 rows=5000 width=40) (actual time=45.120..45.145 rows=10 loops=1)
+        Sort Key: (count(p.id)) DESC
+        Sort Method: top-N heapsort  Memory: 25kB
+        ->  HashAggregate  (cost=1100.00..1150.00 rows=5000 width=40) (actual time=43.000..44.500 rows=4850 loops=1)
+              Group Key: u.id
+              ->  Hash Left Join  (cost=100.00..1000.00 rows=50000 width=36) (actual time=1.234..35.000 rows=48500 loops=1)
+                    Hash Cond: (p.author_id = u.id)
+                    ->  Seq Scan on posts p  (cost=0.00..500.00 rows=30000 width=8) (actual time=0.010..10.000 rows=30000 loops=1)
+                    ->  Hash  (cost=80.00..80.00 rows=5000 width=36) (actual time=1.200..1.200 rows=4850 loops=1)
+                          Buckets: 8192  Batches: 1  Memory Usage: 350kB
+                          ->  Seq Scan on users u  (cost=0.00..80.00 rows=5000 width=36) (actual time=0.005..0.800 rows=4850 loops=1)
+                                Filter: (created_at > '2025-01-01'::date)
+                                Rows Removed by Filter: 150
+Planning Time: 0.250 ms
+Execution Time: 45.200 ms
+```
+
+Key metrics to watch:
+- **Seq Scan** - Full table scan (often bad for large tables)
+- **actual time** - Real execution time
+- **rows** - Number of rows processed
+- **loops** - Number of times the node executed
+
+## Indexing Strategies
+
+### B-Tree Indexes (Default)
+
+Best for equality and range queries:
+
+```sql
+-- Single column index
+CREATE INDEX idx_users_email ON users(email);
+
+-- Composite index (order matters!)
+CREATE INDEX idx_posts_author_created ON posts(author_id, created_at DESC);
+
+-- Partial index (smaller, faster)
+CREATE INDEX idx_posts_published ON posts(created_at DESC)
+WHERE published = true;
+```
+
+### Index Column Order Matters
+
+For a composite index `(a, b, c)`:
+
+| Query Pattern | Uses Index? |
+|--------------|-------------|
+| WHERE a = 1 | ✅ Yes |
+| WHERE a = 1 AND b = 2 | ✅ Yes |
+| WHERE a = 1 AND b = 2 AND c = 3 | ✅ Yes |
+| WHERE b = 2 | ❌ No |
+| WHERE a = 1 AND c = 3 | ⚠️ Partial (only a) |
+
+### GIN Indexes for Arrays and JSONB
+
+```sql
+-- For array columns
+CREATE INDEX idx_posts_tags ON posts USING GIN(tags);
+
+-- For JSONB columns
+CREATE INDEX idx_users_metadata ON users USING GIN(metadata);
+
+-- Query using the index
+SELECT * FROM posts WHERE tags @> ARRAY['typescript', 'nodejs'];
+SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
+```
+
+### Expression Indexes
+
+Index computed values:
+
+```sql
+-- Index for case-insensitive search
+CREATE INDEX idx_users_email_lower ON users(LOWER(email));
+
+-- Query that uses it
+SELECT * FROM users WHERE LOWER(email) = 'john@example.com';
+```
+
+### Covering Indexes (Include)
+
+Include non-key columns to avoid table lookups:
+
+```sql
+-- Include columns needed by the query
+CREATE INDEX idx_posts_author_covering ON posts(author_id)
+INCLUDE (title, created_at);
+
+-- This query can be answered entirely from the index
+SELECT title, created_at FROM posts WHERE author_id = 123;
+```
+
+## Query Optimization Techniques
+
+### Avoid SELECT *
+
+```sql
+-- Bad: fetches all columns
+SELECT * FROM posts WHERE author_id = 123;
+
+-- Good: fetch only needed columns
+SELECT id, title, created_at FROM posts WHERE author_id = 123;
+```
+
+### Use EXISTS Instead of IN for Large Sets
+
+```sql
+-- Slower with large subquery results
+SELECT * FROM users
+WHERE id IN (SELECT author_id FROM posts WHERE published = true);
+
+-- Faster: stops at first match
+SELECT * FROM users u
+WHERE EXISTS (
+  SELECT 1 FROM posts p
+  WHERE p.author_id = u.id AND p.published = true
+);
+```
+
+### Optimize Pagination
+
+Offset-based pagination is slow for large offsets:
+
+```sql
+-- Slow: scans and discards 10000 rows
+SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 10000;
+
+-- Fast: cursor-based pagination
+SELECT * FROM posts
+WHERE created_at < '2025-01-15 10:30:00'
+ORDER BY created_at DESC
+LIMIT 20;
+```
+
+### Use CTEs Wisely
+
+CTEs can prevent optimization in some cases:
+
+```sql
+-- This CTE is materialized (computed once)
+WITH recent_posts AS MATERIALIZED (
+  SELECT * FROM posts WHERE created_at > NOW() - INTERVAL '7 days'
+)
+SELECT * FROM recent_posts WHERE author_id = 123;
+
+-- Better: let the planner optimize
+SELECT * FROM posts
+WHERE created_at > NOW() - INTERVAL '7 days'
+AND author_id = 123;
+```
+
+## Connection Pooling
+
+PostgreSQL forks a new process for each connection (~10MB each). Use connection pooling:
+
+### PgBouncer Configuration
+
+```ini
+; pgbouncer.ini
+[databases]
+myapp = host=localhost port=5432 dbname=myapp
+
+[pgbouncer]
+listen_addr = 0.0.0.0
+listen_port = 6432
+
+; Pool mode: transaction is most efficient
+pool_mode = transaction
+
+; Connection limits
+max_client_conn = 1000
+default_pool_size = 20
+min_pool_size = 5
+reserve_pool_size = 5
+
+; Timeouts
+server_connect_timeout = 15
+server_idle_timeout = 600
+server_lifetime = 3600
+```
+
+### Application-Level Pooling (Prisma)
+
+```typescript
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Connection pool in URL
+// DATABASE_URL="postgresql://user:pass@localhost:5432/myapp?connection_limit=20&pool_timeout=10"
+```
+
+## PostgreSQL Configuration Tuning
+
+Key settings in `postgresql.conf`:
+
+```ini
+# Memory Settings
+shared_buffers = 256MB          # 25% of RAM for dedicated DB server
+effective_cache_size = 768MB    # 75% of RAM
+work_mem = 16MB                 # Per-operation memory
+maintenance_work_mem = 128MB    # For VACUUM, CREATE INDEX
+
+# Write-Ahead Log
+wal_buffers = 16MB
+checkpoint_completion_target = 0.9
+max_wal_size = 1GB
+
+# Query Planner
+random_page_cost = 1.1          # Lower for SSD
+effective_io_concurrency = 200  # Higher for SSD
+
+# Connections
+max_connections = 100           # Keep low, use pooling
+
+# Logging
+log_min_duration_statement = 100  # Log queries > 100ms
+log_statement = 'none'
+log_checkpoints = on
+```
+
+### Memory Formula
+
+```
+shared_buffers = RAM * 0.25
+effective_cache_size = RAM * 0.75
+work_mem = (RAM - shared_buffers) / (max_connections * 3)
+```
+
+## Monitoring and Maintenance
+
+### Identify Slow Queries
+
+```sql
+-- Enable pg_stat_statements extension
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
+
+-- Find slowest queries
+SELECT
+  round(total_exec_time::numeric, 2) as total_time_ms,
+  calls,
+  round(mean_exec_time::numeric, 2) as avg_time_ms,
+  round((100 * total_exec_time / sum(total_exec_time) OVER ())::numeric, 2) as percentage,
+  query
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 10;
+```
+
+### Check Index Usage
+
+```sql
+-- Find unused indexes
+SELECT
+  schemaname,
+  relname as table_name,
+  indexrelname as index_name,
+  idx_scan as times_used,
+  pg_size_pretty(pg_relation_size(indexrelid)) as index_size
+FROM pg_stat_user_indexes
+WHERE idx_scan = 0
+AND indexrelname NOT LIKE '%_pkey'
+ORDER BY pg_relation_size(indexrelid) DESC;
+```
+
+### Find Missing Indexes
+
+```sql
+-- Tables with sequential scans
+SELECT
+  schemaname,
+  relname as table_name,
+  seq_scan,
+  seq_tup_read,
+  idx_scan,
+  idx_tup_fetch,
+  n_live_tup as row_count
+FROM pg_stat_user_tables
+WHERE seq_scan > idx_scan
+AND n_live_tup > 10000
+ORDER BY seq_tup_read DESC;
+```
+
+### Regular Maintenance
+
+```sql
+-- Analyze updates statistics
+ANALYZE posts;
+
+-- Vacuum reclaims dead tuples
+VACUUM ANALYZE posts;
+
+-- Reindex if bloated
+REINDEX INDEX idx_posts_author_id;
+```
+
+## Real-World Optimization Example
+
+Before optimization:
+
+```sql
+EXPLAIN ANALYZE
+SELECT p.*, u.name as author_name
+FROM posts p
+JOIN users u ON u.id = p.author_id
+WHERE p.published = true
+AND p.tags @> ARRAY['typescript']
+ORDER BY p.created_at DESC
+LIMIT 20;
+
+-- Execution Time: 450ms
+```
+
+After optimization:
+
+```sql
+-- 1. Add covering index
+CREATE INDEX idx_posts_published_tags ON posts(created_at DESC)
+INCLUDE (title, author_id)
+WHERE published = true;
+
+-- 2. Add GIN index for tags
+CREATE INDEX idx_posts_tags ON posts USING GIN(tags)
+WHERE published = true;
+
+-- 3. Rewrite query
+SELECT p.id, p.title, p.created_at, u.name as author_name
+FROM posts p
+JOIN users u ON u.id = p.author_id
+WHERE p.published = true
+AND p.tags @> ARRAY['typescript']
+ORDER BY p.created_at DESC
+LIMIT 20;
+
+-- Execution Time: 3ms
+```
+
+## Conclusion
+
+PostgreSQL performance optimization involves:
+
+1. **Understand your queries** - Use EXPLAIN ANALYZE
+2. **Index strategically** - Right index type, right columns, right order
+3. **Optimize queries** - Avoid anti-patterns
+4. **Configure wisely** - Tune memory and connections
+5. **Monitor continuously** - Catch issues early
+6. **Maintain regularly** - VACUUM and ANALYZE
+
+A 150x improvement (450ms to 3ms) is achievable with proper optimization. Start with the slowest queries and work your way through.

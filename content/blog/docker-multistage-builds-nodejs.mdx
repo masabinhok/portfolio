@@ -1,0 +1,450 @@
+---
+title: "Docker Multi-Stage Builds for Production Node.js Applications"
+summary: "Optimize your Docker images with multi-stage builds. Learn techniques to reduce image size, improve security, and speed up deployments for Node.js applications."
+publishedAt: "2026-01-05"
+author:
+  name: "Sabin Shrestha"
+  role: "Full-Stack Developer"
+  avatar: "/avatar.jpg"
+  bio: "Full-Stack Developer passionate about building scalable backend systems and clean APIs. I focus on TypeScript, NestJS, and PostgreSQL."
+  social:
+    github: "https://github.com/masabinhok"
+    linkedin: "https://linkedin.com/in/sabinshresthaa"
+tags:
+  - "Docker"
+  - "DevOps"
+  - "Node.js"
+  - "Performance"
+  - "CI/CD"
+coverImage: "/blog/docker-multistage.jpg"
+featured: false
+---
+
+Docker images can quickly become bloated, slowing down deployments and increasing attack surface. Multi-stage builds solve this by separating the build environment from the runtime environment.
+
+## The Problem with Single-Stage Builds
+
+A typical single-stage Dockerfile might look like this:
+
+```dockerfile
+# Single-stage build (NOT recommended)
+FROM node:20
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+Problems with this approach:
+
+- **Large image size** - Includes dev dependencies, build tools, source code
+- **Security risks** - Build tools and source code in production
+- **Slow deployments** - Large images take longer to pull
+
+## Multi-Stage Build Solution
+
+Multi-stage builds use multiple `FROM` statements, each starting a new build stage:
+
+```dockerfile
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Install all dependencies for building
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Stage 3: Production
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+# Set production environment
+ENV NODE_ENV=production
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nodejs
+
+# Copy only what's needed for production
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./package.json
+
+# Set ownership
+USER nodejs
+
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]
+```
+
+## Benefits of Multi-Stage Builds
+
+### 1. Smaller Image Size
+
+Compare the sizes:
+
+| Build Type | Image Size |
+|------------|------------|
+| Single-stage | ~1.2 GB |
+| Multi-stage | ~150 MB |
+
+### 2. Better Security
+
+- No build tools in production
+- No source code exposed
+- Non-root user by default
+- Minimal attack surface
+
+### 3. Faster Deployments
+
+Smaller images mean:
+- Faster CI/CD pipelines
+- Quicker container startup
+- Lower storage costs
+
+## Advanced Patterns
+
+### Using Build Arguments
+
+```dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Accept build arguments
+ARG NODE_ENV=production
+ARG API_URL
+
+ENV NODE_ENV=$NODE_ENV
+ENV NEXT_PUBLIC_API_URL=$API_URL
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+```
+
+Build with arguments:
+
+```bash
+docker build \
+  --build-arg NODE_ENV=production \
+  --build-arg API_URL=https://api.example.com \
+  -t myapp:latest .
+```
+
+### Caching Dependencies Efficiently
+
+Layer ordering matters for cache efficiency:
+
+```dockerfile
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Copy ONLY package files first (changes less frequently)
+COPY package.json package-lock.json ./
+
+# This layer is cached if package files haven't changed
+RUN npm ci --only=production
+
+# Copy source code last (changes most frequently)
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json package-lock.json ./
+COPY tsconfig.json ./
+COPY src ./src
+
+RUN npm run build
+```
+
+### Next.js Specific Optimization
+
+For Next.js applications, use the standalone output:
+
+```dockerfile
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Stage 2: Builder
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Disable telemetry during build
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN npm run build
+
+# Stage 3: Runner
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy standalone output
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]
+```
+
+Enable standalone mode in `next.config.js`:
+
+```javascript
+// next.config.js
+module.exports = {
+  output: 'standalone',
+}
+```
+
+### NestJS Optimization
+
+For NestJS applications:
+
+```dockerfile
+# Stage 1: Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Prune dev dependencies
+RUN npm prune --production
+
+# Stage 2: Production
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nestjs
+
+# Copy only necessary files
+COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+
+USER nestjs
+
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+CMD ["node", "dist/main.js"]
+```
+
+## Docker Compose for Development
+
+Use Docker Compose to manage multi-container environments:
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder  # Use builder stage for dev
+    volumes:
+      - .:/app
+      - /app/node_modules  # Don't overwrite node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@db:5432/myapp
+    depends_on:
+      - db
+    command: npm run start:dev
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: myapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+```
+
+## Security Best Practices
+
+### 1. Use Alpine Images
+
+Alpine Linux is minimal (~5MB base):
+
+```dockerfile
+FROM node:20-alpine
+```
+
+### 2. Run as Non-Root User
+
+```dockerfile
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
+USER appuser
+```
+
+### 3. Scan for Vulnerabilities
+
+```bash
+# Using Docker Scout
+docker scout cves myapp:latest
+
+# Using Trivy
+trivy image myapp:latest
+```
+
+### 4. Use .dockerignore
+
+```dockerignore
+# .dockerignore
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.*
+Dockerfile
+docker-compose*.yml
+.dockerignore
+README.md
+.nyc_output
+coverage
+.github
+```
+
+## CI/CD Integration
+
+### GitHub Actions Example
+
+```yaml
+# .github/workflows/docker.yml
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=sha,prefix=
+      
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+```
+
+## Measuring Results
+
+Track your improvements:
+
+```bash
+# Check image size
+docker images myapp
+
+# Analyze layers
+docker history myapp:latest
+
+# Inspect image
+docker inspect myapp:latest
+```
+
+## Conclusion
+
+Multi-stage builds are essential for production Docker images:
+
+1. **Separate build and runtime** - Keep build tools out of production
+2. **Use Alpine images** - Minimize base image size
+3. **Order layers correctly** - Maximize cache efficiency
+4. **Run as non-root** - Improve security
+5. **Scan regularly** - Catch vulnerabilities early
+
+The effort invested in optimizing your Dockerfiles pays off in faster deployments, lower costs, and improved security.
