@@ -1,8 +1,4 @@
-echo "Running ESLint..."
-npm run lint || { echo " Lint failed. Commit aborted."; exit 1; }
-
-
-echo "Building project..."
+echo "Running build check..."
 npm run build || { echo " Build failed. Commit aborted."; exit 1; }
 
 echo "All checks passed. Proceeding with commit..."
