@@ -32,6 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${quickSand.variable} antialiased w-full min-h-screen flex flex-col items-center overflow-x-hidden`}
       >
         <AnimatedBackground />
