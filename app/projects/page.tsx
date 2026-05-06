@@ -25,7 +25,7 @@ export default function Projects() {
           {/* drop your project cards here */}
           <div className="section-block" style={{ gap: 12 }}>
             {[
-              { title: "e4", desc: "Practice, learn, quiz openings, upload PGNs, record lines, and manage content via admin panel.", tags: ["next.js", "nest.js"], gh: "https://github.com/masabinhok/e4", live: "e4-learnchess.vercel.app" },
+              { title: "e4", desc: "Practice, learn, quiz openings, upload PGNs, record lines, and manage content via admin panel.", tags: ["next.js", "nest.js"], gh: "https://github.com/masabinhok/e4", live: "https://e4-learnchess.vercel.app" },
               { title: "smgts", desc: "Event driven microservices School Management System", tags: ["nest.js", "next.js"],    gh: "https://github.com/masabinhok/sms-web", live: "https://sms-nest.vercel.app/" },
             ].map(p => (
               <div className="project-card" key={p.title}>
