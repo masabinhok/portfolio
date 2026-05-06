@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Quicksand } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const quicksand = Quicksand({
+
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "600", "600", "700"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-dm-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -46,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={quicksand.className}>
+    <html lang="en" className={dmSans.className}>
       <body className="min-h-screen bg-white text-zinc-900 antialiased" suppressHydrationWarning>
         <main>{children}</main>
       </body>
