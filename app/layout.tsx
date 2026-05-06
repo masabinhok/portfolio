@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={quicksand.className}>
-      <body className="min-h-screen bg-white text-zinc-900 antialiased">
+      <body className="min-h-screen bg-white text-zinc-900 antialiased" suppressHydrationWarning>
         <main>{children}</main>
       </body>
     </html>
